@@ -23,14 +23,15 @@ public class Main {
               final OutputStream outputStream = clientSocket.getOutputStream()
       ) {
         byte[] bs = new byte[1024];
-
-        final int read = inputStream.read(bs);
-        byte[] bytes = Arrays.copyOf(bs, read);
-        final String content = new String(bytes);
-        String response = "+PONG\r\n";
-        if (content.equalsIgnoreCase("PING")) {
-          outputStream.write(response.getBytes(StandardCharsets.UTF_8));
-          outputStream.flush();
+        int read;
+        while ((read = inputStream.read(bs)) > 0) {
+          byte[] bytes = Arrays.copyOf(bs, read);
+          final String content = new String(bytes);
+          String response = "+PONG\r\n";
+          if (content.equalsIgnoreCase("PING")) {
+            outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+          }
         }
       }
 
