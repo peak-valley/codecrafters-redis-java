@@ -27,7 +27,7 @@ public class Main {
         final int read = inputStream.read(bs);
         byte[] bytes = Arrays.copyOf(bs, read);
         final String content = new String(bytes);
-        String response = "PONG\r\n";
+        String response = "+PONG\r\n";
         if (content.equals("PING")) {
           outputStream.write(response.getBytes(StandardCharsets.UTF_8));
           outputStream.flush();
