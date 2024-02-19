@@ -25,7 +25,7 @@ public class Main {
       ) {
       byte[] bs = new byte[1024];
       int read;
-      if ((read = inputStream.read(bs)) >= 0) {
+      while ((read = inputStream.read(bs)) >= 0) {
         byte[] bytes = Arrays.copyOf(bs, read);
         final String content = new String(bytes);
         String response = "+PONG\r\n";
