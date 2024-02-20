@@ -76,20 +76,10 @@ public class Handler {
         if (list == null) {
             return "$-1\r\n".getBytes();
         }
-        System.out.print("set command param:");
-        for (Object o : list) {
-            System.out.print(new String((byte[]) o) + " ");
-        }
-        System.out.println();
-        final int size = list.size();
-        final Object o = list.get(1);
-        final byte[] o1 = (byte[]) o;
-        final String string = new String(o1);
-        final String[] s = string.split(" ");
-        String key = s[0];
-        String value = s[1];
+        String key = new String((byte[])list.get(1));
+        String value = new String((byte[])list.get(2));
+        System.out.println("set command param:" + key + " " + value);
         KVString kvString = new KVString(key, value);
-        System.out.println("put,k:" + key + ",v:" + value);
         kvStore.put(key, kvString);
         return buildSimpleStrResponse("OK");
     }

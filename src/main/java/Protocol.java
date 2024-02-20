@@ -34,6 +34,7 @@ public class Protocol {
             value = value * 10 + value + b - 48;
             b = readByte(inputStream);
         }
+        System.out.println("multiBulk has " + value + " elements");
         // 再读一个 \n
         readByte(inputStream);
         List<Object> ret = new ArrayList<>(value);
