@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Handler {
 
-    public static Map<String, KVString> kvStore = new ConcurrentHashMap<>();
 
     private final Socket clientSocket;
 
@@ -35,7 +34,7 @@ public class Handler {
                         response = buildSimpleStrResponse("PONG");
                     }
                 } else if (command instanceof List) {
-                    final List commands = (List) command;
+                    final List<Object> commands = (List<Object>) command;
                     byte[] bytes = (byte[])commands.get(0);
                     final String content = new String(bytes);
                     if ("ECHO".equalsIgnoreCase(content.toUpperCase())) {
@@ -44,7 +43,8 @@ public class Handler {
                         response = buildBulkResponse("PONG");
                     } else if ("SET".equalsIgnoreCase(content.toUpperCase())) {
                         System.out.println("set command is running");
-                        response = setCommand(commands);
+                        Set set = new Set();
+                        response = set.execute(commands);
                     } else if ("GET".equalsIgnoreCase(content.toUpperCase())) {
                         System.out.println("get command is running");
                         response = getCommand(commands);
@@ -72,39 +72,18 @@ public class Handler {
         return ("+" + content + "\r\n").getBytes();
     }
 
-    public byte[] setCommand(List<Object> list) {
-        if (list == null) {
-            return "$-1\r\n".getBytes();
-        }
-        String key = new String((byte[])list.get(1));
-        String value = new String((byte[])list.get(2));
-        KVString kvString;
-        if (list.size() >= 4) {
-            String px = new String((byte[])list.get(3));
-            String millSeconds = new String((byte[])list.get(4));
-
-            System.out.println("set command param:" + key + " " + value + " px:" + millSeconds);
-            kvString = new KVString(key, value, Long.parseLong(millSeconds));
-        } else {
-            System.out.println("set command param:" + key + " " + value);
-            kvString = new KVString(key, value);
-        }
-        kvStore.put(key, kvString);
-        return buildSimpleStrResponse("OK");
-    }
-
     public byte[] getCommand(List<Object> list) {
         final Object o = list.get(1);
         final byte[] o1 = (byte[]) o;
         final String key = new String((byte[]) list.get(1));
         System.out.println("get command param:" + key);
-        final KVString kvString = kvStore.get(key);
+        final KVString kvString = SimpleKVCache.get(key);
         if (kvString == null) {
             return Constants.NULL_BULK_STRING_BYTES;
         }
         if (kvString.expire != null && !isNotExpire(kvString.expire)) {
             System.out.println("get command exec failed,key:" + key + " is expired");
-            kvStore.remove(kvString.k);
+            SimpleKVCache.remove(kvString.k);
             return Constants.NULL_BULK_STRING_BYTES;
         } else {
             return buildBulkResponse(kvString.v);
