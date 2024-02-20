@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * see Jedis Protocol
+ */
 public class Protocol {
     public static final byte DOLLAR_BYTE = '$';
     public static final byte START_BYTE = '*';

@@ -13,6 +13,7 @@ public class CommandFactory {
         commandCache.put(Constants.SET, new Set());
         commandCache.put(Constants.ECHO, new Echo());
         commandCache.put(Constants.PING, new Ping());
+        commandCache.put(Constants.INFO, new Info());
 //        commandCache.put(Constant.Constants.PING, new commands.Get());
     }
 

@@ -16,12 +16,27 @@ public class TestClient {
                 setExpire(outputStream, bufferedReader);
                 set(outputStream, bufferedReader);
                 get(outputStream, bufferedReader);
+                info(outputStream, bufferedReader);
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void info(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*2\r\n$4\r\ninfo\r\n$11\r\nreplication\r\n";
+//                String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+        char[] c;
+        int len = bufferedReader.read();
+        c = new char[len];
+        bufferedReader.read(c);
+        final String s = new String(c);
+        System.out.println(s);
     }
 
     private static void get(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {

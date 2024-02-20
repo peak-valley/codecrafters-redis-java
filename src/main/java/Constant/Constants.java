@@ -8,4 +8,5 @@ public interface Constants {
     String PING = "PING";
     String SET = "SET";
     String ECHO = "ECHO";
+    String INFO = "INFO";
 }

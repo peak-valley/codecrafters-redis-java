@@ -37,15 +37,7 @@ public class Handler {
                     final List<Object> content = (List<Object>) data;
                     byte[] bytes = (byte[]) content.get(0);
                     final String command = new String(bytes);
-                    if ("ECHO".equalsIgnoreCase(command.toUpperCase())) {
-                        response = commandFactory.execute(Constants.ECHO, content);
-                    } else if ("PING".equalsIgnoreCase(command.toUpperCase())) {
-                        response = commandFactory.execute(Constants.PING, content);
-                    } else if (Constants.SET.equalsIgnoreCase(command.toUpperCase())) {
-                        response = commandFactory.execute(Constants.SET, content);
-                    } else if (Constants.GET.equalsIgnoreCase(command.toUpperCase())) {
-                        response = commandFactory.execute(Constants.GET, content);
-                    }
+                    response = commandFactory.execute(command.toUpperCase(), content);
                 }
                 outputStream.write(response);
                 outputStream.flush();
