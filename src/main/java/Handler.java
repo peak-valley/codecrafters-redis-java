@@ -78,7 +78,7 @@ public class Handler {
         }
         System.out.print("set command param:");
         for (Object o : list) {
-            System.out.print(new String((byte[]) o));
+            System.out.print(new String((byte[]) o) + " ");
         }
         System.out.println();
         final int size = list.size();
