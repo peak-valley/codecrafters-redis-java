@@ -82,7 +82,7 @@ public class Handler {
         String value = s[1];
         KVString kvString = new KVString(key, value);
         kvStore.put(key, kvString);
-        return buildBulkResponse("OK");
+        return buildSimpleStrResponse("OK");
     }
 
     public byte[] getCommand(List<Object> list) {
