@@ -76,6 +76,11 @@ public class Handler {
         if (list == null) {
             return "$-1\r\n".getBytes();
         }
+        System.out.print("set command param:");
+        for (Object o : list) {
+            System.out.print(new String((byte[]) o));
+        }
+        System.out.println();
         final int size = list.size();
         final Object o = list.get(1);
         final byte[] o1 = (byte[]) o;

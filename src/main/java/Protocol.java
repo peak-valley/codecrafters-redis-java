@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Protocol {
@@ -13,7 +15,7 @@ public class Protocol {
             return null;
         }
         byte b = aByte;
-        System.out.println("process read b:" + b);
+        System.out.println("process read b:" + Arrays.toString(Character.toChars(b)));
             switch (b) {
                 case DOLLAR_BYTE:
                     return processBulkReply(inputStream);
