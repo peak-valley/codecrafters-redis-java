@@ -2,9 +2,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Handler {
 
@@ -39,6 +39,10 @@ public class Handler {
                         response = buildBulkResponse(new String((byte[]) commands.get(1)));
                     } else if ("PING".equalsIgnoreCase(content.toUpperCase())) {
                         response = buildBulkResponse("PONG");
+                    } else if ("SET".equalsIgnoreCase(content.toUpperCase())) {
+                        response = setCommand(commands);
+                    } else if ("GET".equalsIgnoreCase(content.toUpperCase())) {
+                        response = getCommand(commands);
                     }
                 }
                 outputStream.write(response);
@@ -61,5 +65,35 @@ public class Handler {
 
     public byte[] buildSimpleStrResponse(String content) {
         return ("+" + content + "\r\n").getBytes();
+    }
+
+    Map<String, KVString> kvStore = new HashMap<>();
+
+    public byte[] setCommand(List<Object> list) {
+        if (list == null) {
+            return "$-1\r\n".getBytes();
+        }
+        final int size = list.size();
+        final Object o = list.get(1);
+        final byte[] o1 = (byte[]) o;
+        final String string = new String(o1);
+        final String[] s = string.split(" ");
+        String key = s[0];
+        String value = s[1];
+        KVString kvString = new KVString(key, value);
+        kvStore.put(key, kvString);
+        return buildSimpleStrResponse("OK");
+    }
+
+    public byte[] getCommand(List<Object> list) {
+        final int size = list.size();
+        final Object o = list.get(1);
+        final byte[] o1 = (byte[]) o;
+        final String key = new String(o1);
+        final KVString kvString = kvStore.get(key);
+        if (kvString == null) {
+            return buildBulkResponse(null);
+        }
+        return buildBulkResponse(kvString.v);
     }
 }
