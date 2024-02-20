@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -78,21 +78,43 @@ public class Handler {
         }
         String key = new String((byte[])list.get(1));
         String value = new String((byte[])list.get(2));
-        System.out.println("set command param:" + key + " " + value);
-        KVString kvString = new KVString(key, value);
+        KVString kvString;
+        if (list.size() >= 4) {
+            String px = new String((byte[])list.get(3));
+            String millSeconds = new String((byte[])list.get(4));
+
+            System.out.println("set command param:" + key + " " + value + " px:" + millSeconds);
+            kvString = new KVString(key, value, Long.parseLong(millSeconds));
+        } else {
+            System.out.println("set command param:" + key + " " + value);
+            kvString = new KVString(key, value);
+        }
         kvStore.put(key, kvString);
         return buildSimpleStrResponse("OK");
     }
 
     public byte[] getCommand(List<Object> list) {
-        final int size = list.size();
         final Object o = list.get(1);
         final byte[] o1 = (byte[]) o;
-        final String key = new String(o1);
+        final String key = new String((byte[]) list.get(1));
+        System.out.println("get command param:" + key);
         final KVString kvString = kvStore.get(key);
         if (kvString == null) {
-            return buildBulkResponse(null);
+            return Constants.NULL_BULK_STRING_BYTES;
         }
-        return buildBulkResponse(kvString.v);
+        if (kvString.expire != null && !isNotExpire(kvString.expire)) {
+            System.out.println("get command exec failed,key:" + key + " is expired");
+            kvStore.remove(kvString.k);
+            return Constants.NULL_BULK_STRING_BYTES;
+        } else {
+            return buildBulkResponse(kvString.v);
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isNotExpire(LocalDateTime.now().plusDays(-1)));
+    }
+    public static boolean isNotExpire(LocalDateTime dateTime) {
+        return LocalDateTime.now().compareTo(dateTime) <= 0;
     }
 }
