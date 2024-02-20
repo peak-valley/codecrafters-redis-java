@@ -52,7 +52,7 @@ public class Main {
       return null;
     }
 
-    port = port.replaceFirst("--port=", "");
+    port = port.replaceFirst("--port ", "");
     return Integer.parseInt(port);
   }
 }
