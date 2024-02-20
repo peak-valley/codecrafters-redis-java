@@ -28,6 +28,7 @@ public class Handler {
                     final byte[] bytes = (byte[]) command;
                     final String content = new String(bytes);
                     if ("PING".equalsIgnoreCase(content.toUpperCase())) {
+                        System.out.println("ping command reception");
                         response = buildSimpleStrResponse("PONG");
                     }
                 } else if (command instanceof List) {
@@ -50,6 +51,7 @@ public class Handler {
         int length = content.length();
         StringBuilder sb = new StringBuilder();
         String ret = "$" + length + "\r\n" + content + "\r\n";
+        System.out.println("build response " + ret);
 //        byte[] ret = new byte[]
 //        ret.add((byte) '+');
         return ret.getBytes();

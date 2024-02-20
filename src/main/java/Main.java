@@ -21,7 +21,7 @@ public class Main {
       serverSocket.setReuseAddress(true);
       while (true) {
         Socket clientSocket = serverSocket.accept();
-        System.out.println("客户端连接：IP:" + clientSocket.getInetAddress() + ", port:" + clientSocket.getPort());
+        System.out.println("client conn：IP:" + clientSocket.getInetAddress() + ", port:" + clientSocket.getPort());
         executorService.submit(() -> {
           Handler handler = new Handler(clientSocket);
           handler.handle();
