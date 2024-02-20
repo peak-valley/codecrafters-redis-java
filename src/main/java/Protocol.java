@@ -13,6 +13,7 @@ public class Protocol {
             return null;
         }
         byte b = aByte;
+        System.out.println("process read b:" + b);
             switch (b) {
                 case DOLLAR_BYTE:
                     return processBulkReply(inputStream);
@@ -38,7 +39,7 @@ public class Protocol {
             try {
                 ret.add(process(inputStream));
             } catch (IOException e) {
-                System.out.println("processMultiBulkReply is faild,msg:"+e.getMessage());
+                System.out.println("processMultiBulkReply is failed,msg:"+e.getMessage());
                 e.printStackTrace();
             }
         }

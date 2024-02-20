@@ -43,8 +43,10 @@ public class Handler {
                     } else if ("PING".equalsIgnoreCase(content.toUpperCase())) {
                         response = buildBulkResponse("PONG");
                     } else if ("SET".equalsIgnoreCase(content.toUpperCase())) {
+                        System.out.println("set command is running");
                         response = setCommand(commands);
                     } else if ("GET".equalsIgnoreCase(content.toUpperCase())) {
+                        System.out.println("get command is running");
                         response = getCommand(commands);
                     }
                 }
@@ -82,6 +84,7 @@ public class Handler {
         String key = s[0];
         String value = s[1];
         KVString kvString = new KVString(key, value);
+        System.out.println("put,k:" + key + ",v:" + value);
         kvStore.put(key, kvString);
         return buildSimpleStrResponse("OK");
     }
