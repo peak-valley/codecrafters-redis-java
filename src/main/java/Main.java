@@ -13,11 +13,7 @@ public class Main {
   public static void main(String[] args){
     final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    Integer p = resolve(args);
-    int port = 6379;
-    if (p != null) {
-      port = p;
-    }
+    int port = resolve(args);
     ServerSocket serverSocket = null;
     try {
       serverSocket = new ServerSocket(port);
@@ -44,15 +40,18 @@ public class Main {
   }
 
   public static Integer resolve(String[] args) {
-    if (args.length == 0) {
-      return null;
-    }
-    String port = args[0];
-    if (port == null || port.length() < 8) {
-      return null;
+    if (args.length < 2) {
+      return 6379;
     }
 
-    port = port.replaceFirst("--port ", "");
-    return Integer.parseInt(port);
+    if ("--port".equals(args[0])) {
+      try {
+        return Integer.parseInt(args[1]);
+      } catch (NumberFormatException e) {
+        System.out.printf("The second parameter is not a number,args[1]:" + args[1]);
+        return 6379;
+      }
+    }
+    return 6379;
   }
 }
