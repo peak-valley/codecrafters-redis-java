@@ -1,3 +1,8 @@
+package commands;
+
+import collect.KVString;
+import collect.SimpleKVCache;
+
 import java.util.List;
 
 public class Set extends AbstractCommand {

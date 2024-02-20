@@ -1,3 +1,8 @@
+import Constant.Constants;
+import commands.Command;
+import commands.Get;
+import commands.Set;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +13,7 @@ public class CommandFactory {
     public CommandFactory() {
         commandCache.put(Constants.GET, new Get());
         commandCache.put(Constants.SET, new Set());
-//        commandCache.put(Constants.PING, new Get());
+//        commandCache.put(Constant.Constants.PING, new commands.Get());
     }
 
     public byte[] execute(String command, List<Object> content) {

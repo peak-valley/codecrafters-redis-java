@@ -1,3 +1,9 @@
+package commands;
+
+import Constant.Constants;
+import collect.KVString;
+import collect.SimpleKVCache;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,12 +19,12 @@ public class Get extends AbstractCommand {
         if (kvString == null) {
             return Constants.NULL_BULK_STRING_BYTES;
         }
-        if (kvString.expire != null && !isNotExpire(kvString.expire)) {
+        if (kvString.getExpire() != null && !isNotExpire(kvString.getExpire())) {
             System.out.println("get command exec failed,key:" + key + " is expired");
-            SimpleKVCache.remove(kvString.k);
+            SimpleKVCache.remove(kvString.getK());
             return Constants.NULL_BULK_STRING_BYTES;
         } else {
-            return buildBulkResponse(kvString.v);
+            return buildBulkResponse(kvString.getV());
         }
     }
 

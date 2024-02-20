@@ -1,3 +1,7 @@
+package collect;
+
+import collect.KVString;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

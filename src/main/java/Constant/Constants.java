@@ -1,3 +1,5 @@
+package Constant;
+
 public interface Constants {
     String NULL_BULK_STRING = "$-1\r\n";
     byte[] NULL_BULK_STRING_BYTES = NULL_BULK_STRING.getBytes();
@@ -5,4 +7,5 @@ public interface Constants {
     String GET = "GET";
     String PING = "PING";
     String SET = "SET";
+    String ECHO = "ECHO";
 }

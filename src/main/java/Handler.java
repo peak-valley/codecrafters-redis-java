@@ -1,3 +1,5 @@
+import Constant.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -36,7 +38,7 @@ public class Handler {
                     byte[] bytes = (byte[]) content.get(0);
                     final String command = new String(bytes);
                     if ("ECHO".equalsIgnoreCase(command.toUpperCase())) {
-                        response = buildBulkResponse(new String((byte[]) content.get(1)));
+                        response = commandFactory.execute(Constants.ECHO, content);
                     } else if ("PING".equalsIgnoreCase(command.toUpperCase())) {
                         response = buildBulkResponse("PONG");
                     } else if (Constants.SET.equalsIgnoreCase(command.toUpperCase())) {
