@@ -5,8 +5,11 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Handler {
+
+    public static Map<String, KVString> kvStore = new ConcurrentHashMap<>();
 
     private final Socket clientSocket;
 
@@ -66,8 +69,6 @@ public class Handler {
     public byte[] buildSimpleStrResponse(String content) {
         return ("+" + content + "\r\n").getBytes();
     }
-
-    Map<String, KVString> kvStore = new HashMap<>();
 
     public byte[] setCommand(List<Object> list) {
         if (list == null) {
