@@ -40,8 +40,8 @@ public class Handler {
                     } else if ("PING".equalsIgnoreCase(command.toUpperCase())) {
                         response = buildBulkResponse("PONG");
                     } else if (Constants.SET.equalsIgnoreCase(command.toUpperCase())) {
-                        commandFactory.execute(Constants.SET, content);
-                    } else if ("GET".equalsIgnoreCase(command.toUpperCase())) {
+                        response = commandFactory.execute(Constants.SET, content);
+                    } else if (Constants.GET.equalsIgnoreCase(command.toUpperCase())) {
                         response = commandFactory.execute(Constants.GET, content);
                     }
                 }
