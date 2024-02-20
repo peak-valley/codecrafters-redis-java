@@ -4,6 +4,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 public class Handler {
 
@@ -20,15 +21,41 @@ public class Handler {
         ) {
             byte[] bs = new byte[1024];
             int read;
-            while ((read = inputStream.read(bs)) >= 0) {
-                byte[] bytes = Arrays.copyOf(bs, read);
-                final String content = new String(bytes);
-                String response = "+PONG\r\n";
-                outputStream.write(response.getBytes(StandardCharsets.UTF_8));
+            while (true) {
+                final Object command = Protocol.process(inputStream);
+                byte[] response = null;
+                if (command instanceof byte[]) {
+                    final byte[] bytes = (byte[]) command;
+                    final String content = new String(bytes);
+                    if ("PING".equalsIgnoreCase(content.toUpperCase())) {
+                        response = buildSimpleStrResponse("PONG");
+                    }
+                } else if (command instanceof List) {
+                    final List commands = (List) command;
+                    byte[] bytes = (byte[])commands.get(0);
+                    final String content = new String(bytes);
+                    if ("ECHO".equalsIgnoreCase(content.toUpperCase())) {
+                        response = buildBulkResponse(new String((byte[]) commands.get(1)));
+                    }
+                }
+                outputStream.write(response);
                 outputStream.flush();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public byte[] buildBulkResponse(String content) {
+        int length = content.length();
+        StringBuilder sb = new StringBuilder();
+        String ret = "$" + length + "\r\n" + content + "\r\n";
+//        byte[] ret = new byte[]
+//        ret.add((byte) '+');
+        return ret.getBytes();
+    }
+
+    public byte[] buildSimpleStrResponse(String content) {
+        return ("+" + content + "\r\n").getBytes();
     }
 }
