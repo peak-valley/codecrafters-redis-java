@@ -37,6 +37,8 @@ public class Handler {
                     final String content = new String(bytes);
                     if ("ECHO".equalsIgnoreCase(content.toUpperCase())) {
                         response = buildBulkResponse(new String((byte[]) commands.get(1)));
+                    } else if ("PING".equalsIgnoreCase(content.toUpperCase())) {
+                        response = buildBulkResponse("PONG");
                     }
                 }
                 outputStream.write(response);
