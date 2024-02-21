@@ -8,19 +8,20 @@ public class RedisInformation {
     private static Map<String, String> infoMap = new HashMap<>();
     static {
         infoMap.put("role", "master");
+        infoMap.put("master_replid", "8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb");
+        infoMap.put("master_repl_offset", "0");
     }
 
     public static String getInfo() {
         StringBuilder ret = new StringBuilder();
         final Set<String> infoSet = infoMap.keySet();
-        if (infoSet.size() == 1) {
-            for (String s : infoSet) {
-                ret.append(s).append(":").append(infoMap.get(s));
-            }
-        } else {
-            for (String s : infoSet) {
-                ret.append(s).append(":").append(infoMap.get(s)).append("\n");
-            }
+//        if (infoSet.size() == 1) {
+//            for (String s : infoSet) {
+//                ret.append(s).append(":").append(infoMap.get(s));
+//            }
+//        } else {
+        for (String s : infoSet) {
+            ret.append(s).append(":").append(infoMap.get(s)).append(":");
         }
         return ret.toString();
     }
