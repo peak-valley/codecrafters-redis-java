@@ -1,4 +1,4 @@
-package cluster;
+package com.zyf.cluster;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

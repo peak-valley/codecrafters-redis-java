@@ -1,4 +1,4 @@
-package infomation;
+package com.zyf.infomation;
 
 import java.util.HashMap;
 import java.util.Map;

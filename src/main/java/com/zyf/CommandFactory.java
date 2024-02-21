@@ -1,5 +1,7 @@
-import Constant.Constants;
-import commands.*;
+package com.zyf;
+
+import com.zyf.Constant.Constants;
+import com.zyf.commands.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,7 @@ public class CommandFactory {
         commandCache.put(Constants.ECHO, new Echo());
         commandCache.put(Constants.PING, new Ping());
         commandCache.put(Constants.INFO, new Info());
-//        commandCache.put(Constant.Constants.PING, new commands.Get());
+//        commandCache.put(com.zyf.Constant.Constants.PING, new com.zyf.commands.Get());
     }
 
     public byte[] execute(String command, List<Object> content) {

@@ -1,7 +1,7 @@
-package Constant;
+package com.zyf.Constant;
 
 public interface Constants {
-    // cluster
+    // com.zyf.cluster
     String MASTER_HOST = "MASTER_HOST";
     String MASTER_PORT = "MASTER_PORT";
     // data

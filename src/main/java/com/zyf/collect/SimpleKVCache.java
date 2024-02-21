@@ -1,6 +1,4 @@
-package collect;
-
-import collect.KVString;
+package com.zyf.collect;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,6 +1,6 @@
-package commands;
+package com.zyf.commands;
 
-import infomation.RedisInformation;
+import com.zyf.infomation.RedisInformation;
 
 import java.util.List;
 

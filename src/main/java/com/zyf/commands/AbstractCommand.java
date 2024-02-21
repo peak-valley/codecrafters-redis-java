@@ -1,4 +1,4 @@
-package commands;
+package com.zyf.commands;
 
 public abstract class AbstractCommand implements Command {
     public byte[] buildBulkResponse(String content) {

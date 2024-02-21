@@ -1,7 +1,8 @@
-import Constant.Constants;
-import cluster.ClusterInformation;
-import cluster.Master;
-import infomation.RedisInformation;
+import com.zyf.Constant.Constants;
+import com.zyf.Handler;
+import com.zyf.cluster.ClusterInformation;
+import com.zyf.cluster.Slave;
+import com.zyf.infomation.RedisInformation;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -60,8 +61,8 @@ public class Main {
         ClusterInformation.put(Constants.MASTER_HOST, args[++i]);
         ClusterInformation.put(Constants.MASTER_PORT, args[++i]);
         try {
-          Master master = new Master();
-          master.init();
+          Slave slave = new Slave();
+          slave.init();
         } catch (IOException e) {
           e.printStackTrace();
         }

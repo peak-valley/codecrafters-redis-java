@@ -1,3 +1,5 @@
+package com.zyf;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.CharBuffer;
@@ -6,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * see Jedis Protocol
+ * see Jedis com.zyf.Protocol
  */
 public class Protocol {
     public static final byte DOLLAR_BYTE = '$';

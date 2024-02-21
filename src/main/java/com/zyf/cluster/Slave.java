@@ -1,29 +1,30 @@
-package cluster;
+package com.zyf.cluster;
 
-import Constant.Constants;
-import infomation.RedisInformation;
+import com.zyf.CommandFactory;
+import com.zyf.Constant.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class Master {
-    Socket client;
+public class Slave {
+    Socket masterClient;
 
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    public Master() throws IOException {
-        client = new Socket(ClusterInformation.get(Constants.MASTER_HOST), Integer.parseInt(ClusterInformation.get(Constants.MASTER_PORT)));
-    this.outputStream = client.getOutputStream();
-    this.inputStream = client.getInputStream();
+    public Slave() throws IOException {
+        masterClient = new Socket(ClusterInformation.get(Constants.MASTER_HOST), Integer.parseInt(ClusterInformation.get(Constants.MASTER_PORT)));
+    this.outputStream = masterClient.getOutputStream();
+    this.inputStream = masterClient.getInputStream();
     }
 
     public void init() {
-        // handshake
+        // handshake send ping
         try {
-            outputStream.write("PING".getBytes());
+            String command = "*1\r\n$4\r\nping\r\n";
+            outputStream.write( command.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }

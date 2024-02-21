@@ -1,7 +1,7 @@
-package commands;
+package com.zyf.commands;
 
-import collect.KVString;
-import collect.SimpleKVCache;
+import com.zyf.collect.KVString;
+import com.zyf.collect.SimpleKVCache;
 
 import java.util.List;
 

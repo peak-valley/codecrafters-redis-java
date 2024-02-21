@@ -1,3 +1,5 @@
+package com.zyf;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,7 +15,7 @@ public class TestClient {
 
     private static void server() {
         try {
-            ServerSocket serverSocket = new ServerSocket(6380);
+            ServerSocket serverSocket = new ServerSocket(6379);
             Socket socket = serverSocket.accept();
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
