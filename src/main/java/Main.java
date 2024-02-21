@@ -1,11 +1,8 @@
+import infomation.RedisInformation;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,10 +10,10 @@ public class Main {
   public static void main(String[] args){
     final ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-    int port = resolve(args);
+    resolve(args);
     ServerSocket serverSocket = null;
     try {
-      serverSocket = new ServerSocket(port);
+      serverSocket = new ServerSocket(RedisInformation.getPort());
       serverSocket.setReuseAddress(true);
       while (true) {
         Socket clientSocket = serverSocket.accept();
@@ -39,19 +36,27 @@ public class Main {
     }
   }
 
-  public static Integer resolve(String[] args) {
-    if (args.length < 2) {
-      return 6379;
+  public static void resolve(String[] args) {
+    if (args.length == 0) {
+      return;
     }
 
-    if ("--port".equals(args[0])) {
-      try {
-        return Integer.parseInt(args[1]);
-      } catch (NumberFormatException e) {
-        System.out.printf("The second parameter is not a number,args[1]:" + args[1]);
-        return 6379;
-      }
+    for (int i = 0; i < args.length; i++) {
+      if ("--port".equals(args[i])) {
+        try {
+          RedisInformation.setPort(Integer.parseInt(args[++i]));
+        } catch (NumberFormatException e) {
+          System.out.printf("The second parameter is not a number,args[1]:" + args[i]);
+        }
+      } else if ("--replicaof".equalsIgnoreCase(args[i])) {
+        RedisInformation.setInfo("role", "slave");
+        if (args[i + 1].startsWith("--")) {
+          continue;
+        }
+        //resolve master host
+        String masterHost = args[++i];
+        String masterPort = args[++i];
     }
-    return 6379;
+    }
   }
 }
