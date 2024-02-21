@@ -14,4 +14,5 @@ public interface Constants {
     String ECHO = "ECHO";
     String INFO = "INFO";
     String REPLCONF = "REPLCONF";
+    String PSYNC = "PSYNC";
 }
