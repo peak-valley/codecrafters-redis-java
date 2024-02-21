@@ -1,6 +1,10 @@
 package Constant;
 
 public interface Constants {
+    // cluster
+    String MASTER_HOST = "MASTER_HOST";
+    String MASTER_PORT = "MASTER_PORT";
+    // data
     String NULL_BULK_STRING = "$-1\r\n";
     byte[] NULL_BULK_STRING_BYTES = NULL_BULK_STRING.getBytes();
     // command

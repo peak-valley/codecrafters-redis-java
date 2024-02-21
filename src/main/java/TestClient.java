@@ -1,10 +1,32 @@
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.CharBuffer;
+import java.util.Arrays;
 
 public class TestClient {
     public static void main(String[] args) {
+        server();
+//        client();
+    }
+
+    private static void server() {
+        try {
+            ServerSocket serverSocket = new ServerSocket(6380);
+            Socket socket = serverSocket.accept();
+            OutputStream outputStream = socket.getOutputStream();
+            InputStream inputStream = socket.getInputStream();
+            byte[] b = new byte[1024];
+            int read = inputStream.read(b);
+            String s = new String(Arrays.copyOf(b, read));
+            System.out.println(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void client() {
         try (
                 Socket client = new Socket("localhost", 6379);
                 final OutputStream outputStream = client.getOutputStream();

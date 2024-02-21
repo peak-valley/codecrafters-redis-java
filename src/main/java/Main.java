@@ -1,3 +1,6 @@
+import Constant.Constants;
+import cluster.ClusterInformation;
+import cluster.Master;
 import infomation.RedisInformation;
 
 import java.io.IOException;
@@ -54,9 +57,16 @@ public class Main {
           continue;
         }
         //resolve master host
-        String masterHost = args[++i];
-        String masterPort = args[++i];
-    }
+        ClusterInformation.put(Constants.MASTER_HOST, args[++i]);
+        ClusterInformation.put(Constants.MASTER_PORT, args[++i]);
+        try {
+          Master master = new Master();
+          master.init();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+
+      }
     }
   }
 }
