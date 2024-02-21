@@ -41,6 +41,11 @@ public class Slave {
             System.out.println("send " + sendContent + " to master");
             b = buildRESPArray(sendContent);
             outputStream.write(b);
+            //3.PSYNC ? -1
+            sendContent = Arrays.asList("PSYNC", "?", "-1");
+            System.out.println("send " + sendContent + " to master");
+            b = buildRESPArray(sendContent);
+            outputStream.write(b);
         } catch (IOException e) {
             e.printStackTrace();
         }
