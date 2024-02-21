@@ -16,6 +16,7 @@ public class CommandFactory {
         commandCache.put(Constants.ECHO, new Echo());
         commandCache.put(Constants.PING, new Ping());
         commandCache.put(Constants.INFO, new Info());
+        commandCache.put(Constants.REPLCONF, new ReplConf());
 //        commandCache.put(com.zyf.Constant.Constants.PING, new com.zyf.commands.Get());
     }
 
