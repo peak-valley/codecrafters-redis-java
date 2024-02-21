@@ -20,9 +20,12 @@ public class TestClient {
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
             byte[] b = new byte[1024];
-            int read = inputStream.read(b);
-            String s = new String(Arrays.copyOf(b, read));
-            System.out.println(s);
+            int read;
+
+            while ((read = inputStream.read(b)) > 0) {
+                String s = new String(Arrays.copyOf(b, read));
+                System.out.println(s);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
