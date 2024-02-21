@@ -21,7 +21,7 @@ public class RedisInformation {
 //            }
 //        } else {
         for (String s : infoSet) {
-            ret.append(s).append(":").append(infoMap.get(s)).append(":");
+            ret.append(s).append(":").append(infoMap.get(s)).append("\n");
         }
         return ret.toString();
     }
