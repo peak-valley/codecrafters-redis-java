@@ -30,6 +30,10 @@ public class RedisInformation {
         return infoMap.put(k, v);
     }
 
+    public static String get(String k) {
+        return infoMap.get(k);
+    }
+
     public static int port = 6379;
 
     public static void setPort(int p) {
