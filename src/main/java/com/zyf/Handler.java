@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -71,9 +70,6 @@ public class Handler {
         }
     }
 
-    public static void main(String[] args) {
-        System.out.println(Arrays.toString(decode));
-    }
     public byte[] buildBulkResponse(String content) {
         int length = content.length();
         StringBuilder sb = new StringBuilder();
