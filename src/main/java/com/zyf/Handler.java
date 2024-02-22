@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 public class Handler {
@@ -53,12 +55,15 @@ public class Handler {
                     continue;
                 }
                 outputStream.write(response);
-                outputStream.flush();
                 if (c.equals(Constants.PSYNC)) {
-                    outputStream.write(
-                            "$0\r\n".getBytes());
-                    outputStream.flush();
+                    System.out.println("send empty RDB");
+                    byte[] decode = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
+                    String prefix = "$" + decode.length + "/r/n";
 
+                    byte[] bytes = prefix.getBytes();
+//                    Base64
+                    outputStream.write(bytes);
+                    outputStream.write(decode);
                 }
             }
         } catch (IOException e) {
@@ -66,6 +71,9 @@ public class Handler {
         }
     }
 
+    public static void main(String[] args) {
+        System.out.println(Arrays.toString(decode));
+    }
     public byte[] buildBulkResponse(String content) {
         int length = content.length();
         StringBuilder sb = new StringBuilder();
