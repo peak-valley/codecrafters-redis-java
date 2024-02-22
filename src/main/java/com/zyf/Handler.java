@@ -57,10 +57,12 @@ public class Handler {
                 outputStream.write(response);
                 if (c.equals(Constants.PSYNC)) {
                     System.out.println("send empty RDB");
-                    String db = new String(Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64));
-                    String prefix = "$" + db.length() + "\r\n";
+//                    sendRDBFile(outputStream);
+                    byte[] decodeDB = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
+                    String prefix = "$" + decodeDB.length + "\r\n";
 
-                    outputStream.write((prefix + db).getBytes());
+                    outputStream.write(prefix.getBytes());
+                    outputStream.write(decodeDB);
                 }
             }
         } catch (IOException e) {
@@ -68,17 +70,17 @@ public class Handler {
         }
     }
 
-//    private void sendRDBFile(OutputStream outputStream){
-//        byte[] decoded_db = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
-//        String prefix = "$" + decoded_db.length + "\r\n";
-//        byte[] prefixBytes = prefix.getBytes();
-//        try {
-//            outputStream.write(prefixBytes);
-//            outputStream.write(decoded_db);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    private void sendRDBFile(OutputStream outputStream){
+        byte[] decoded_db = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
+        String prefix = "$" + decoded_db.length + "\r\n";
+        byte[] prefixBytes = prefix.getBytes();
+        try {
+            outputStream.write(prefixBytes);
+            outputStream.write(decoded_db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public byte[] buildBulkResponse(String content) {
         int length = content.length();
