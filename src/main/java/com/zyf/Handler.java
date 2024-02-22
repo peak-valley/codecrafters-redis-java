@@ -38,6 +38,15 @@ public class Handler {
                     byte[] bytes = (byte[]) content.get(0);
                     final String command = new String(bytes);
                     response = commandFactory.execute(command.toUpperCase(), content);
+                } else if (data instanceof String content){
+                    String[] strings = content.split(" ");
+                    response = commandFactory.execute(strings[0].toUpperCase(), List.of(strings));
+                } else {
+                    System.out.println("error data type");
+                }
+                if (response == null) {
+                    System.out.printf("respose is null");
+                    continue;
                 }
                 outputStream.write(response);
                 outputStream.flush();

@@ -15,4 +15,5 @@ public interface Constants {
     String INFO = "INFO";
     String REPLCONF = "REPLCONF";
     String PSYNC = "PSYNC";
+    String FULLRESYNC = "FULLRESYNC";
 }

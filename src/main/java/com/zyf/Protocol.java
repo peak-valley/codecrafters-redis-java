@@ -1,7 +1,9 @@
 package com.zyf;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,10 +11,14 @@ import java.util.List;
 
 /**
  * see Jedis com.zyf.Protocol
+ *
+ * @link
+ * <a href="https://github.com/redis/jedis/blob/11a4513ff9581a40530a84e6c8ee019c4a3f9e38/src/main/java/redis/clients/jedis/Protocol.java">protocol</a>
  */
 public class Protocol {
     public static final byte DOLLAR_BYTE = '$';
     public static final byte START_BYTE = '*';
+    public static final byte PLUS_BYTE = '+';
 
     public static Object process(final InputStream inputStream) throws IOException {
         final Byte aByte = readByte(inputStream);
@@ -26,14 +32,25 @@ public class Protocol {
                     return processBulkReply(inputStream);
                 case START_BYTE:
                     return processMultiBulkReply(inputStream);
+                case PLUS_BYTE:
+                    return processSimpleReply(inputStream);
                 default:
                     throw new IOException("Unknown reply:"+ b);
             }
     }
 
+    private static Object processSimpleReply(InputStream inputStream) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        try {
+            return br.readLine();
+        } catch (IOException e) {
+            System.out.println("processSimpleReply is failed:" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
     private static Object processMultiBulkReply(InputStream inputStream) {
         byte b = readByte(inputStream);
-
         int value = 0;
         while (b >= 48 && b <= 57) {
             value = value * 10 + value + b - 48;
