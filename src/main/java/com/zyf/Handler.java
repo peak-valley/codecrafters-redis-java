@@ -60,10 +60,11 @@ public class Handler {
                     byte[] decode = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
                     String prefix = "$" + decode.length + "/r/n";
 
-                    byte[] bytes = prefix.getBytes();
+                    String s = prefix + new String(decode);
+                    System.out.println(s);
 //                    Base64
-                    outputStream.write(bytes);
-                    outputStream.write(decode);
+//                    outputStream.write(bytes);
+                    outputStream.write(s.getBytes());
                 }
             }
         } catch (IOException e) {
