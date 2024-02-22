@@ -57,14 +57,12 @@ public class Handler {
                 outputStream.write(response);
                 if (c.equals(Constants.PSYNC)) {
                     System.out.println("send empty RDB");
-                    byte[] decode = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
-                    String prefix = "$" + decode.length + "/r/n";
+                    String db = new String(Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64));
+                    String prefix = "$" + db.length() + "/r/n";
 
-                    String s = prefix + new String(decode);
-                    System.out.println(s);
 //                    Base64
 //                    outputStream.write(bytes);
-                    outputStream.write(decode);
+                    outputStream.write((prefix + db).getBytes());
                 }
             }
         } catch (IOException e) {
