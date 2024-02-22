@@ -8,6 +8,6 @@ public class Psync extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
 
-        return buildSimpleStrResponse("FULLRESYNC " + RedisInformation.get("master_replid") + " 0\r\n");
+        return buildSimpleStrResponse("FULLRESYNC " + RedisInformation.get("master_replid") + " 0");
     }
 }
