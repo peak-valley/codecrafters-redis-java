@@ -64,7 +64,7 @@ public class Handler {
                     System.out.println(s);
 //                    Base64
 //                    outputStream.write(bytes);
-                    outputStream.write(s.getBytes());
+                    outputStream.write(decode);
                 }
             }
         } catch (IOException e) {
