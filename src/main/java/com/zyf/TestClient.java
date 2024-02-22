@@ -6,14 +6,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.CharBuffer;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestClient {
     static int mainPort = 6380;
     public static void main(String[] args) {
-        server();
-//        client();
+//        server();
+        client();
     }
-
+// --replicaof localhost 6379
     private static void server() {
         try {
             ServerSocket serverSocket = new ServerSocket(6379);
@@ -42,20 +43,26 @@ public class TestClient {
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
         ) {
             for (int i = 0; i < 1; i++) {
-                pong(outputStream, bufferedReader);
-                pong(outputStream, bufferedReader);
+//                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
 //                set(outputStream, bufferedReader);
 //                get(outputStream, bufferedReader);
 //                info(outputStream, bufferedReader);
+                psync(outputStream, bufferedReader);
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void psync(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        List<String> sendContent = Arrays.asList("PSYNC", "?", "-1");
+        System.out.println("send " + sendContent + " to master");
+        outputStream.write(buildRESPArray(sendContent));
     }
 
     private static void pong(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
@@ -150,4 +157,13 @@ public class TestClient {
         final String s = new String(c);
         System.out.println(s);
     }
+
+    public static byte[] buildRESPArray(List<String> content) {
+        String ret = "*" + content.size() + "\r\n";
+        for (String command : content) {
+            ret += "$" + command.length() + "\r\n" + command + "\r\n";
+        }
+        return ret.getBytes();
+    }
+
 }

@@ -41,6 +41,7 @@ public class Handler {
                     final List<Object> content = (List<Object>) data;
                     byte[] bytes = (byte[]) content.get(0);
                     final String command = new String(bytes);
+                    c = command;
                     response = commandFactory.execute(command.toUpperCase(), content);
                 } else if (data instanceof String content){
                     String[] strings = content.split(" ");
