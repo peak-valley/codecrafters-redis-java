@@ -1,5 +1,7 @@
 package com.zyf;
 
+import com.zyf.Constant.Constants;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,6 +25,7 @@ public class Handler {
         ) {
             byte[] bs = new byte[1024];
             int read;
+            String c = "";
             while (true) {
                 final Object data = Protocol.process(inputStream);
                 byte[] response = null;
@@ -40,7 +43,8 @@ public class Handler {
                     response = commandFactory.execute(command.toUpperCase(), content);
                 } else if (data instanceof String content){
                     String[] strings = content.split(" ");
-                    response = commandFactory.execute(strings[0].toUpperCase(), List.of(strings));
+                    c = strings[0].toUpperCase();
+                    response = commandFactory.execute(c, List.of(strings));
                 } else {
                     System.out.println("error data type");
                 }
@@ -50,6 +54,12 @@ public class Handler {
                 }
                 outputStream.write(response);
                 outputStream.flush();
+                if (c.equals(Constants.PSYNC)) {
+                    outputStream.write(
+                            "524544495330303131fa0972656469732d76657205372e322e30fa0a72656469732d62697473c040fa056374696d65c26d08bc65fa08757365642d6d656dc2b0c41000fa08616f662d62617365c000fff06e3bfec0ff5aa2".getBytes());
+                    outputStream.flush();
+
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
