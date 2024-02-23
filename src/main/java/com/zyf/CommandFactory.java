@@ -18,14 +18,15 @@ public class CommandFactory {
         commandCache.put(Constants.INFO, new Info());
         commandCache.put(Constants.REPLCONF, new ReplConf());
         commandCache.put(Constants.PSYNC, new Psync());
+        commandCache.put(Constants.FULLRESYNC, new FullResync());
 //        commandCache.put(com.zyf.Constant.Constants.PING, new com.zyf.commands.Get());
     }
 
     public byte[] execute(String command, List<Object> content) {
         final Command c = commandCache.get(command);
         if (c == null) {
-            System.out.printf("command " + command + " is not exist");
-            throw new IllegalArgumentException("command " + command + " is not exist");
+            System.out.println("command " + command + " is not exist");
+            return null;
         }
         System.out.println(command + " command is running");
         return c.execute(content);

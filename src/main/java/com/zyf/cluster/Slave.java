@@ -2,6 +2,7 @@ package com.zyf.cluster;
 
 import com.zyf.CommandFactory;
 import com.zyf.Constant.Constants;
+import com.zyf.Handler;
 import com.zyf.infomation.RedisInformation;
 
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class Slave {
         masterClient = new Socket(ClusterInformation.get(Constants.MASTER_HOST), Integer.parseInt(ClusterInformation.get(Constants.MASTER_PORT)));
         this.outputStream = masterClient.getOutputStream();
         this.inputStream = masterClient.getInputStream();
+        Handler handler = new Handler(masterClient);
+        new Thread(handler::handle).start();
     }
 
     public void init() {
