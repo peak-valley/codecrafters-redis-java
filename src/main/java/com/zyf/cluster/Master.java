@@ -21,6 +21,7 @@ public class Master {
     public void addSlave(String ip, int port) {
         try {
             Socket slave = new Socket(ip, port);
+            System.out.println("connect slave->" + ip + ":" + port);
             slaveList.add(slave);
         } catch (IOException e) {
             System.out.println("add slave failed,e:" + e.getMessage());
@@ -34,6 +35,7 @@ public class Master {
         byte[] b = buildArraysCommand(data);
         for (Socket socket : slaveList) {
             try(OutputStream outputStream = socket.getOutputStream()) {
+                System.out.println("write to slave command ->" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
                 outputStream.write(b);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -56,6 +58,7 @@ public class Master {
             String o1 = new String((byte[]) o);
             command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
         }
+        System.out.println("build command ->" + command);
         return command.toString().getBytes();
     }
 }      
