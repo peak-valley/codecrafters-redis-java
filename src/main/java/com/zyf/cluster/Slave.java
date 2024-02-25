@@ -31,38 +31,18 @@ public class Slave {
     }
 
     public void init() {
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            // 1.handshake send ping
-            System.out.println("send ping to master");
-            byte[] b = buildRESPArray(Collections.singletonList("ping"));
-            outputStream.write(b);
-            print(reader);
-            //2.handshake send REPLCONF listening-port <PORT>
-            List<String> sendContent = Arrays.asList("REPLCONF", "listening-port", String.valueOf(RedisInformation.getPort()));
-            System.out.println("send " + sendContent + " to master");
-            b = buildRESPArray(sendContent);
-            outputStream.write(b);
-            print(reader);
-            // REPLCONF capa psync2
-            sendContent = Arrays.asList("REPLCONF", "capa", "psync2");
-            System.out.println("send " + sendContent + " to master");
-            b = buildRESPArray(sendContent);
-            outputStream.write(b);
-            print(reader);
-            //3.PSYNC ? -1
-            sendContent = Arrays.asList("PSYNC", "?", "-1");
-            System.out.println("send " + sendContent + " to master");
-            b = buildRESPArray(sendContent);
-            outputStream.write(b);
-            print(reader);
-            print(reader);
-            // REPLCONF ACK 0
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        SlaveHandle slaveHandle = new SlaveHandle(masterClient);
+        SlaveHandle slaveHandle = new SlaveHandle(masterClient, inputStream, outputStream);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        slaveHandle.init(reader);
         ThreadPool.execute(slaveHandle::handle);
+        try {
+            System.out.println(reader.readLine());
+            System.out.println(reader.readLine());
+            System.out.println(reader.readLine());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void print(BufferedReader br) throws IOException {

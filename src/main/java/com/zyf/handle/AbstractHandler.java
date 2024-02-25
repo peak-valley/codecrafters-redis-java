@@ -18,17 +18,26 @@ public abstract class AbstractHandler implements IHandler{
 
     private final Socket clientSocket;
     CommandFactory commandFactory = new CommandFactory();
+    InputStream inputStream;
+    OutputStream outputStream;
 
     public AbstractHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
+    public AbstractHandler(Socket clientSocket, InputStream inputStream, OutputStream outputStream) {
+        this.clientSocket = clientSocket;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
+    }
+
     @Override
     public void handle() {
-        try(
-                InputStream inputStream = clientSocket.getInputStream();
-                final OutputStream outputStream = clientSocket.getOutputStream()
-        ) {
+        try {
+            if (inputStream == null || outputStream == null) {
+                inputStream = clientSocket.getInputStream();
+                outputStream = clientSocket.getOutputStream();
+            }
             byte[] bs = new byte[1024];
             int read;
             String c = "";
