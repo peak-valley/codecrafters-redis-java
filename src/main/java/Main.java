@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 public class Main {
     public static void main(String[] args){
-        final ExecutorService executorService = Executors.newFixedThreadPool(2);
+        final ExecutorService executorService = Executors.newCachedThreadPool();
         // --port <PORT> --replicaof <MASTER_HOST> <MASTER_PORT>
         resolve(args);
         ServerSocket serverSocket = null;

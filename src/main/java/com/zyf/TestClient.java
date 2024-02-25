@@ -25,13 +25,6 @@ public class TestClient {
         }
 //        server();
         client();
-        while (true) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
     }
 // --replicaof localhost 6379
     private static void server() {
@@ -64,12 +57,11 @@ public class TestClient {
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-//                set(outputStream, bufferedReader);
+                set(outputStream, bufferedReader);
 //                get(outputStream, bufferedReader);
 //                info(outputStream, bufferedReader);
                 new Thread(() -> print(bufferedReader)).start();
 //                psync(outputStream, bufferedReader);
-                set(outputStream, bufferedReader);
 
             }
         } catch (UnknownHostException e) {
