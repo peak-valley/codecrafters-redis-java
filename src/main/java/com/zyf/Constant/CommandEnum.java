@@ -11,14 +11,6 @@ public enum CommandEnum {
     PSYNC("PSYNC", OTHER),
 
     ;
-//
-//    String PING = "PING";
-//    String SET = "SET";
-//    String ECHO = "ECHO";
-//    String INFO = "INFO";
-//    String REPLCONF = "REPLCONF";
-//    String PSYNC = "PSYNC";
-
 
     CommandEnum(String name, CommandType type) {
         this.name = name;
@@ -28,10 +20,11 @@ public enum CommandEnum {
     String name;
     CommandType type;
 
-    public void getName() {
-        getName();
+    public String getName() {
+        return name;
     }
-    public void setName(String name) {
-        this.name = name;
+
+    public CommandType getType() {
+        return type;
     }
 }

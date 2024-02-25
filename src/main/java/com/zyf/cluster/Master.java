@@ -1,5 +1,8 @@
 package com.zyf.cluster;
 
+import com.zyf.Constant.CommandEnum;
+import com.zyf.Constant.CommandType;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -25,13 +28,25 @@ public class Master {
     }
 
     public void send(List<Object> data) {
+        if(!checkWrite((String) data.get(0))) {
+            return;
+        }
+        byte[] b = buildArraysCommand(data);
         for (Socket socket : slaveList) {
             try(OutputStream outputStream = socket.getOutputStream()) {
-                outputStream.write(buildArraysCommand(data));
+                outputStream.write(b);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public boolean checkWrite(String command) {
+        CommandEnum commandEnum = CommandEnum.valueOf(command);
+        if (CommandType.WRITE.equals(commandEnum.getType())) {
+            return true;
+        }
+        return false;
     }
 
     public byte[] buildArraysCommand(List<Object> data) {

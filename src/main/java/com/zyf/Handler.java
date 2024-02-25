@@ -43,9 +43,10 @@ public class Handler {
                 } else if (data instanceof List) {
                     final List<Object> content = (List<Object>) data;
                     byte[] bytes = (byte[]) content.get(0);
-                    final String command = new String(bytes);
+                    final String command = new String(bytes).toUpperCase();
                     c = command;
-                    response = commandFactory.execute(command.toUpperCase(), content);
+                    response = commandFactory.execute(command, content);
+                    master.send(content);
                 } else if (data instanceof String content){
                     String[] strings = content.split(" ");
                     c = strings[0].toUpperCase();
