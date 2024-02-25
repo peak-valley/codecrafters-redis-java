@@ -60,12 +60,15 @@ public class TestClient {
                     String s1 = "";
 //                    s1 = bufferedReader.readLine();
 //                    System.out.println(s1);
+                    Socket socket1 = new Socket("localhost", 6379);
+                    OutputStream outputStream1 = socket1.getOutputStream();
+                    InputStream inputStream1 = socket1.getInputStream();
+                    BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream));
+                    set(outputStream1, bufferedReader1, "foo", "123");
+                    set(outputStream1, bufferedReader1, "bar", "2123");
+                    set(outputStream1, bufferedReader1, "baz", "24523");
 
-                    set(outputStream, bufferedReader, "foo", "123");
-                    set(outputStream, bufferedReader, "bar", "2123");
-                    set(outputStream, bufferedReader, "foo", "24523");
-
-                    get(outputStream, bufferedReader, "foo");
+                    get(outputStream1, bufferedReader1, "foo");
                 }
 //                get(outputStream, bufferedReader);
             }
