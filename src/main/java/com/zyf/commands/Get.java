@@ -11,8 +11,6 @@ public class Get extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
         System.out.println("get data is running");
-        final Object o = content.get(1);
-        final byte[] o1 = (byte[]) o;
         final String key = new String((byte[]) content.get(1));
         System.out.println("get command param:" + key);
         final KVString kvString = SimpleKVCache.get(key);
