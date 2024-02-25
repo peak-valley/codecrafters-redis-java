@@ -1,6 +1,7 @@
 package com.zyf.cluster;
 
 import com.zyf.Constant.Constants;
+import com.zyf.ThreadPool;
 import com.zyf.handle.Handler;
 import com.zyf.handle.SlaveHandle;
 import com.zyf.infomation.RedisInformation;
@@ -60,12 +61,7 @@ public class Slave {
             e.printStackTrace();
         }
         SlaveHandle slaveHandle = new SlaveHandle(masterClient);
-        new Thread(slaveHandle::handle).start();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        ThreadPool.execute(slaveHandle::handle);
     }
 
     public void print(BufferedReader br) throws IOException {
