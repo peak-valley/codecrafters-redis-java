@@ -11,7 +11,7 @@ import java.util.List;
 public class TestClient {
     static int mainPort = 6380;
     public static void main(String[] args) {
-//        server();
+        server();
         client();
     }
 // --replicaof localhost 6379
@@ -63,6 +63,11 @@ public class TestClient {
         List<String> sendContent = Arrays.asList("PSYNC", "?", "-1");
         System.out.println("send " + sendContent + " to master");
         outputStream.write(buildRESPArray(sendContent));
+        while(true) {
+            String s = bufferedReader.readLine();
+            if (!(s != null)) break;
+            System.out.println(s);
+        }
     }
 
     private static void pong(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {

@@ -1,6 +1,7 @@
 package com.zyf;
 
 import com.zyf.Constant.Constants;
+import com.zyf.cluster.Master;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +15,8 @@ public class Handler {
 
     private final Socket clientSocket;
     CommandFactory commandFactory = new CommandFactory();
+
+    Master master = new Master();
 
     public Handler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -63,6 +66,7 @@ public class Handler {
 
                     outputStream.write(prefix.getBytes());
                     outputStream.write(decodeDB);
+                    master.addSlave(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort());
                 }
             }
         } catch (IOException e) {

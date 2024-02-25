@@ -27,16 +27,12 @@ public class Protocol {
         }
         byte b = aByte;
         System.out.println("process read b:" + Arrays.toString(Character.toChars(b)));
-            switch (b) {
-                case DOLLAR_BYTE:
-                    return processBulkReply(inputStream);
-                case START_BYTE:
-                    return processMultiBulkReply(inputStream);
-                case PLUS_BYTE:
-                    return processSimpleReply(inputStream);
-                default:
-                    throw new IOException("Unknown reply:"+ b);
-            }
+        return switch (b) {
+            case DOLLAR_BYTE -> processBulkReply(inputStream);
+            case START_BYTE -> processMultiBulkReply(inputStream);
+            case PLUS_BYTE -> processSimpleReply(inputStream);
+            default -> throw new IOException("Unknown reply:" + b);
+        };
     }
 
     private static Object processSimpleReply(InputStream inputStream) {

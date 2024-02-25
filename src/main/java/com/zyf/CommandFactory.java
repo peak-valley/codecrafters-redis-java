@@ -19,7 +19,6 @@ public class CommandFactory {
         commandCache.put(Constants.REPLCONF, new ReplConf());
         commandCache.put(Constants.PSYNC, new Psync());
         commandCache.put(Constants.FULLRESYNC, new FullResync());
-//        commandCache.put(com.zyf.Constant.Constants.PING, new com.zyf.commands.Get());
     }
 
     public byte[] execute(String command, List<Object> content) {

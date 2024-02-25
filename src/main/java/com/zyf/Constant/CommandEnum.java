@@ -1,12 +1,14 @@
 package com.zyf.Constant;
 
+import static com.zyf.Constant.CommandType.*;
+
 public enum CommandEnum {
-    GET("GET"),
-    SET("SET"),
-    ECHO("ECHO"),
-    INFO("INFO"),
-    REPLCONF("REPLCONF"),
-    PSYNC("PSYNC"),
+    GET("GET", READ),
+    SET("SET", WRITE),
+    ECHO("ECHO", READ),
+    INFO("INFO", READ),
+    REPLCONF("REPLCONF", OTHER),
+    PSYNC("PSYNC", OTHER),
 
     ;
 //
@@ -18,11 +20,14 @@ public enum CommandEnum {
 //    String PSYNC = "PSYNC";
 
 
-    CommandEnum(String name) {
+    CommandEnum(String name, CommandType type) {
         this.name = name;
+        this.type = type;
     }
 
     String name;
+    CommandType type;
+
     public void getName() {
         getName();
     }

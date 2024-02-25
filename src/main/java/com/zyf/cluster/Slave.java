@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Running in slave mode
+ */
 public class Slave {
     Socket masterClient;
 
