@@ -67,7 +67,7 @@ public class Handler {
 
                     outputStream.write(prefix.getBytes());
                     outputStream.write(decodeDB);
-                    master.addSlave(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort());
+                    master.addSlave(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort(), outputStream);
                 }
             }
         } catch (IOException e) {

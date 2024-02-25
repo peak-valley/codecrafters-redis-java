@@ -16,27 +16,26 @@ import static com.zyf.Constant.Constants.*;
  */
 public class Master {
 
-    List<Socket> slaveList = new ArrayList<>();
+    List<OutputStream> slaveList = new ArrayList<>();
 
-    public void addSlave(String ip, int port) {
-        try {
-            Socket slave = new Socket(ip, port);
-            System.out.println("connect slave->" + ip + ":" + port);
-            slaveList.add(slave);
-        } catch (IOException e) {
-            System.out.println("add slave failed,e:" + e.getMessage());
-        }
+    public void addSlave(String ip, int port, OutputStream os) {
+        System.out.println("connect slave->" + ip + ":" + port);
+        slaveList.add(os);
     }
 
     public void send(List<Object> data) {
         if(!checkWrite(new String((byte[]) data.get(0)))) {
             return;
         }
+        if (slaveList.size() < 1) {
+            System.out.println("not slave node");
+            return;
+        }
         byte[] b = buildArraysCommand(data);
-        for (Socket socket : slaveList) {
-            try(OutputStream outputStream = socket.getOutputStream()) {
-                System.out.println("write to slave command ->" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
-                outputStream.write(b);
+        for (OutputStream os : slaveList) {
+            try {
+//                System.out.println("write to slave command ->" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
+                os.write(b);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

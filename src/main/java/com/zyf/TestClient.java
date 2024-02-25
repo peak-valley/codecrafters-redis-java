@@ -4,13 +4,18 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TestClient {
     static int mainPort = 6380;
+    static ExecutorService executorService;
     public static void main(String[] args) {
+        executorService = Executors.newFixedThreadPool(1);
 //        server();
         client();
     }
@@ -50,7 +55,10 @@ public class TestClient {
                 set(outputStream, bufferedReader);
                 get(outputStream, bufferedReader);
                 info(outputStream, bufferedReader);
+                new Thread(() -> print(bufferedReader)).start();
                 psync(outputStream, bufferedReader);
+                set(outputStream, bufferedReader);
+
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -58,16 +66,22 @@ public class TestClient {
             e.printStackTrace();
         }
     }
+        public static void print(BufferedReader br) {
+            String s;
+            while (true) {
+                try {
+                    if ((s = br.readLine()) == null) break;
+                    System.out.println(s);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
 
     private static void psync(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         List<String> sendContent = Arrays.asList("PSYNC", "?", "-1");
         System.out.println("send " + sendContent + " to master");
         outputStream.write(buildRESPArray(sendContent));
-        while(true) {
-            String s = bufferedReader.readLine();
-            if (!(s != null)) break;
-            System.out.println(s);
-        }
     }
 
     private static void pong(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
@@ -130,12 +144,12 @@ public class TestClient {
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";
         outputStream.write(command.getBytes());
-        char[] c;
-        int len = bufferedReader.read();
-        c = new char[len];
-        bufferedReader.read(c);
-        final String s = new String(c);
-        System.out.println(s);
+//        char[] c;
+//        int len = bufferedReader.read();
+//        c = new char[len];
+//        bufferedReader.read(c);
+//        final String s = new String(c);
+//        System.out.println(s);
     }
     private static void ping(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
                 String command = "*1\r\n$4\r\nping\r\n";
