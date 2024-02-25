@@ -15,7 +15,7 @@ public class Main {
 //    --port 6379 --replicaof localhost 6380
 //    --port 6380
     public static void main(String[] args){
-        final ExecutorService executorService = Executors.newCachedThreadPool();
+        final ExecutorService executorService = Executors.newFixedThreadPool(5);
         // --port <PORT> --replicaof <MASTER_HOST> <MASTER_PORT>
         resolve(args);
         ServerSocket serverSocket = null;
