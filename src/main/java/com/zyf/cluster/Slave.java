@@ -57,6 +57,7 @@ public class Slave {
             outputStream.write(b);
             print(reader);
             print(reader);
+            // REPLCONF ACK 0
         } catch (IOException e) {
             e.printStackTrace();
         }

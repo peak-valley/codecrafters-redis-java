@@ -55,21 +55,23 @@ public class TestClient {
                     outputStream.write(prefix.getBytes());
                     outputStream.write(decodeDB);
                     psync = true;
-                }
-                if (psync) {
-                    String s1 = "";
-//                    s1 = bufferedReader.readLine();
-//                    System.out.println(s1);
-                    Socket socket1 = new Socket("localhost", 6379);
-                    OutputStream outputStream1 = socket1.getOutputStream();
-                    InputStream inputStream1 = socket1.getInputStream();
-                    BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream));
-                    set(outputStream1, bufferedReader1, "foo", "123");
-                    set(outputStream1, bufferedReader1, "bar", "2123");
-                    set(outputStream1, bufferedReader1, "baz", "24523");
 
-                    get(outputStream1, bufferedReader1, "foo");
+                    outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                 }
+//                if (psync) {
+//                    String s1 = "";
+////                    s1 = bufferedReader.readLine();
+////                    System.out.println(s1);
+//                    Socket socket1 = new Socket("localhost", 6379);
+//                    OutputStream outputStream1 = socket1.getOutputStream();
+//                    InputStream inputStream1 = socket1.getInputStream();
+//                    BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream));
+//                    set(outputStream1, bufferedReader1, "foo", "123");
+//                    set(outputStream1, bufferedReader1, "bar", "2123");
+//                    set(outputStream1, bufferedReader1, "baz", "24523");
+//
+//                    get(outputStream1, bufferedReader1, "foo");
+//                }
 //                get(outputStream, bufferedReader);
             }
         } catch (IOException e) {
