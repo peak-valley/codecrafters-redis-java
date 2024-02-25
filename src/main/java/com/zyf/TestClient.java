@@ -11,7 +11,7 @@ import java.util.List;
 public class TestClient {
     static int mainPort = 6380;
     public static void main(String[] args) {
-        server();
+//        server();
         client();
     }
 // --replicaof localhost 6379
@@ -44,12 +44,12 @@ public class TestClient {
         ) {
             for (int i = 0; i < 1; i++) {
 //                pong(outputStream, bufferedReader);
-//                ping(outputStream, bufferedReader);
-//                echo(outputStream, bufferedReader);
-//                setExpire(outputStream, bufferedReader);
-//                set(outputStream, bufferedReader);
-//                get(outputStream, bufferedReader);
-//                info(outputStream, bufferedReader);
+                ping(outputStream, bufferedReader);
+                echo(outputStream, bufferedReader);
+                setExpire(outputStream, bufferedReader);
+                set(outputStream, bufferedReader);
+                get(outputStream, bufferedReader);
+                info(outputStream, bufferedReader);
                 psync(outputStream, bufferedReader);
             }
         } catch (UnknownHostException e) {

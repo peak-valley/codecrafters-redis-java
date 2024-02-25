@@ -28,7 +28,7 @@ public class Master {
     }
 
     public void send(List<Object> data) {
-        if(!checkWrite((String) data.get(0))) {
+        if(!checkWrite(new String((byte[]) data.get(0)))) {
             return;
         }
         byte[] b = buildArraysCommand(data);
@@ -42,7 +42,7 @@ public class Master {
     }
 
     public boolean checkWrite(String command) {
-        CommandEnum commandEnum = CommandEnum.valueOf(command);
+        CommandEnum commandEnum = CommandEnum.valueOf(command.toUpperCase());
         if (CommandType.WRITE.equals(commandEnum.getType())) {
             return true;
         }
@@ -53,7 +53,7 @@ public class Master {
 
         StringBuilder command = new StringBuilder("*" + data.size() + _R_N);
         for (Object o : data) {
-            String o1 = (String) o;
+            String o1 = new String((byte[]) o);
             command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
         }
         return command.toString().getBytes();

@@ -2,6 +2,7 @@ package com.zyf.Constant;
 
 public interface Constants {
     String _R_N = "\r\n";
+    byte[] _R_N_BYTES = _R_N.getBytes();
     // com.zyf.cluster
     String MASTER_HOST = "MASTER_HOST";
     String MASTER_PORT = "MASTER_PORT";

@@ -9,6 +9,8 @@ public enum CommandEnum {
     INFO("INFO", READ),
     REPLCONF("REPLCONF", OTHER),
     PSYNC("PSYNC", OTHER),
+    PING("PING", READ),
+    NULL("NULL", OTHER)
 
     ;
 
