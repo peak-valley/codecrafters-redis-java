@@ -17,6 +17,7 @@ public class Get extends AbstractCommand {
         System.out.println("get command param:" + key);
         final KVString kvString = SimpleKVCache.get(key);
         if (kvString == null) {
+            System.out.println("value is null, return " + Constants.NULL_BULK_STRING);
             return Constants.NULL_BULK_STRING_BYTES;
         }
         if (kvString.getExpire() != null && !isNotExpire(kvString.getExpire())) {
@@ -24,6 +25,7 @@ public class Get extends AbstractCommand {
             SimpleKVCache.remove(kvString.getK());
             return Constants.NULL_BULK_STRING_BYTES;
         } else {
+            System.out.println("value is " + kvString.getV());
             return buildBulkResponse(kvString.getV());
         }
     }
