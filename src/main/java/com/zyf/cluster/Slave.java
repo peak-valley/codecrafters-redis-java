@@ -61,6 +61,11 @@ public class Slave {
         }
         SlaveHandle slaveHandle = new SlaveHandle(masterClient);
         new Thread(slaveHandle::handle).start();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void print(BufferedReader br) throws IOException {
