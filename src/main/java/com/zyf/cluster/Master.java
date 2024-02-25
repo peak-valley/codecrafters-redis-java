@@ -5,7 +5,6 @@ import com.zyf.Constant.CommandType;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +14,20 @@ import static com.zyf.Constant.Constants.*;
  * Running in master mode
  */
 public class Master {
-
+    private volatile static Master MY = null;
     List<OutputStream> slaveList = new ArrayList<>();
+
+    public static boolean moasterMode = true;
+
+    public static Master getMaster() {
+        return MY;
+    }
+
+    public static synchronized void init() {
+        if (MY == null) {
+            MY = new Master();
+        }
+    }
 
     public void addSlave(String ip, int port, OutputStream os) {
         System.out.println("connect slave->" + ip + ":" + port);

@@ -14,10 +14,24 @@ import java.util.concurrent.Executors;
 public class TestClient {
     static int mainPort = 6380;
     static ExecutorService executorService;
+    static Socket client = null;
+    static OutputStream outputStream = null;
     public static void main(String[] args) {
         executorService = Executors.newFixedThreadPool(1);
+        try {
+            client = new Socket("localhost", mainPort);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 //        server();
         client();
+        while (true) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 // --replicaof localhost 6379
     private static void server() {
@@ -42,21 +56,19 @@ public class TestClient {
     }
 
     private static void client() {
-        try (
-                Socket client = new Socket("localhost", mainPort);
-                final OutputStream outputStream = client.getOutputStream();
+        try {
+                outputStream = client.getOutputStream();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        ) {
             for (int i = 0; i < 1; i++) {
 //                pong(outputStream, bufferedReader);
-                ping(outputStream, bufferedReader);
-                echo(outputStream, bufferedReader);
-                setExpire(outputStream, bufferedReader);
-                set(outputStream, bufferedReader);
-                get(outputStream, bufferedReader);
-                info(outputStream, bufferedReader);
+//                ping(outputStream, bufferedReader);
+//                echo(outputStream, bufferedReader);
+//                setExpire(outputStream, bufferedReader);
+//                set(outputStream, bufferedReader);
+//                get(outputStream, bufferedReader);
+//                info(outputStream, bufferedReader);
                 new Thread(() -> print(bufferedReader)).start();
-                psync(outputStream, bufferedReader);
+//                psync(outputStream, bufferedReader);
                 set(outputStream, bufferedReader);
 
             }

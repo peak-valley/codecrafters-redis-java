@@ -2,6 +2,7 @@ package com.zyf;
 
 import com.zyf.Constant.Constants;
 import com.zyf.cluster.Master;
+import com.zyf.infomation.RedisInformation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,11 +13,8 @@ import java.util.List;
 
 public class Handler {
 
-
     private final Socket clientSocket;
     CommandFactory commandFactory = new CommandFactory();
-
-    Master master = new Master();
 
     public Handler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -46,7 +44,9 @@ public class Handler {
                     final String command = new String(bytes).toUpperCase();
                     c = command;
                     response = commandFactory.execute(command, content);
-                    master.send(content);
+                    if (Master.getMaster() != null) {
+                        Master.getMaster().send(content);
+                    }
                 } else if (data instanceof String content){
                     String[] strings = content.split(" ");
                     c = strings[0].toUpperCase();
@@ -67,7 +67,10 @@ public class Handler {
 
                     outputStream.write(prefix.getBytes());
                     outputStream.write(decodeDB);
-                    master.addSlave(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort(), outputStream);
+                    if (Master.getMaster() != null) {
+                        Master.getMaster().addSlave(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort(),
+                                outputStream);
+                    }
                 }
             }
         } catch (IOException e) {
