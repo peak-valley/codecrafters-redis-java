@@ -60,10 +60,12 @@ public class TestClient {
                     String s1 = "";
 //                    s1 = bufferedReader.readLine();
 //                    System.out.println(s1);
-                    set(outputStream, bufferedReader);
-                    if((s1 = bufferedReader.readLine()) != null) {
-                        System.out.printf(s1);
-                    }
+
+                    set(outputStream, bufferedReader, "foo", "123");
+                    set(outputStream, bufferedReader, "bar", "2123");
+                    set(outputStream, bufferedReader, "foo", "24523");
+
+                    get(outputStream, bufferedReader, "foo");
                 }
 //                get(outputStream, bufferedReader);
             }
@@ -81,7 +83,9 @@ public class TestClient {
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-                set(outputStream, bufferedReader);
+                set(outputStream, bufferedReader, "foo", "123");
+                set(outputStream, bufferedReader, "bar", "2123");
+                set(outputStream, bufferedReader, "foo", "24523");
 //                get(outputStream, bufferedReader);
 //                info(outputStream, bufferedReader);
                 new Thread(() -> print(bufferedReader)).start();
@@ -139,8 +143,8 @@ public class TestClient {
         System.out.println(s);
     }
 
-    private static void get(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*2\r\n$3\r\nget\r\n$6\r\nmangos\r\n";
+    private static void get(OutputStream outputStream, BufferedReader bufferedReader, String k) throws IOException {
+        String command = "*2\r\n$3\r\nget\r\n$"+ k.length() +"\r\n" + k + "\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";
@@ -166,8 +170,8 @@ public class TestClient {
         System.out.println(s);
     }
 
-    private static void set(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*3\r\n$3\r\nset\r\n$6\r\nmangos\r\n$5\r\nhello\r\n";
+    private static void set(OutputStream outputStream, BufferedReader bufferedReader, String k, String v) throws IOException {
+        String command = "*3\r\n$3\r\nset\r\n$"+k.length()+"\r\n" + k + "\r\n$"+v.length()+"\r\n"+v+"\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";

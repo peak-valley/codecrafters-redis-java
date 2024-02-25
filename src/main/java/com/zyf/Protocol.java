@@ -21,25 +21,21 @@ public class Protocol {
     public static final byte PLUS_BYTE = '+';
 
     public static Object process(final InputStream inputStream) throws IOException {
-        return process(inputStream, false);
-    }
-
-    public static Object process(InputStream inputStream, boolean recursive) throws IOException {
         final Byte aByte = readByte(inputStream);
         if (aByte == null) {
             return null;
         }
         byte b = aByte;
-        System.out.println("process read b:" + Arrays.toString(Character.toChars(b)));
+//        System.out.println("process read b:" + Arrays.toString(Character.toChars(b)));
         return switch (b) {
-            case DOLLAR_BYTE -> processBulkReply(inputStream, recursive);
+            case DOLLAR_BYTE -> processBulkReply(inputStream);
             case START_BYTE -> processMultiBulkReply(inputStream);
             case PLUS_BYTE -> processSimpleReply(inputStream);
             default -> throw new IOException("Unknown reply:" + b);
         };
     }
 
-    public static Object processSimpleReply(InputStream inputStream) {
+    private static Object processSimpleReply(InputStream inputStream) {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
         try {
             return br.readLine();
@@ -49,7 +45,7 @@ public class Protocol {
         }
     }
 
-    public static Object processMultiBulkReply(InputStream inputStream) {
+    private static Object processMultiBulkReply(InputStream inputStream) {
         byte b = readByte(inputStream);
         int value = 0;
         while (b >= 48 && b <= 57) {
@@ -62,7 +58,7 @@ public class Protocol {
         List<Object> ret = new ArrayList<>(value);
         for (int i = 0; i < value; i++) {
             try {
-                ret.add(process(inputStream, true));
+                ret.add(process(inputStream));
             } catch (IOException e) {
                 System.out.println("processMultiBulkReply is failed,msg:"+e.getMessage());
                 e.printStackTrace();
@@ -71,9 +67,9 @@ public class Protocol {
         return ret;
     }
 
-    public static Object processBulkReply(InputStream inputStream, boolean recursive) {
+    public static Object processBulkReply(InputStream inputStream) {
         byte b = readByte(inputStream);
-        // 
+        //
         int value = 0;
         while (b >= 48 && b <= 57) {
             value = value * 10 + b - 48;
@@ -89,10 +85,8 @@ public class Protocol {
         } catch (IOException e) {
             System.out.println("读取Bulk失败,msg:"+e.getMessage());
         }
-        if (recursive) {
-            readByte(inputStream);
-            readByte(inputStream);
-        }
+        readByte(inputStream);
+        readByte(inputStream);
 
         return read;
     }
@@ -106,7 +100,7 @@ public class Protocol {
             }
             return b[0];
         } catch (IOException e) {
-                throw new IllegalArgumentException("data is null");
+            throw new IllegalArgumentException("data is null");
         }
     }
 }
