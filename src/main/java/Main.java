@@ -1,5 +1,5 @@
 import com.zyf.Constant.Constants;
-import com.zyf.Handler;
+import com.zyf.handle.Handler;
 import com.zyf.cluster.ClusterInformation;
 import com.zyf.cluster.Master;
 import com.zyf.cluster.Slave;
@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
+//    --port 6379 --replicaof localhost 6380
+//    --port 6380
     public static void main(String[] args){
         final ExecutorService executorService = Executors.newCachedThreadPool();
         // --port <PORT> --replicaof <MASTER_HOST> <MASTER_PORT>
@@ -46,7 +48,7 @@ public class Main {
         if (args.length == 0) {
             return;
         }
-
+        boolean isSlave = false;
         for (int i = 0; i < args.length; i++) {
             if ("--port".equals(args[i])) {
                 try {
@@ -54,8 +56,8 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.out.printf("The second parameter is not a number,args[1]:" + args[i]);
                 }
-            }
-            if ("--replicaof".equalsIgnoreCase(args[i])) {
+            } else if ("--replicaof".equalsIgnoreCase(args[i])) {
+                isSlave = true;
                 RedisInformation.setInfo("role", "slave");
                 if (args[i + 1].startsWith("--")) {
                     continue;
@@ -69,9 +71,12 @@ public class Main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                Master.init();
             }
         }
+
+        if (!isSlave) {
+            Master.init();
+        }
+
     }
 }

@@ -10,6 +10,7 @@ public enum CommandEnum {
     REPLCONF("REPLCONF", OTHER),
     PSYNC("PSYNC", OTHER),
     PING("PING", READ),
+    FULLRESYNC("FULLRESYNC", OTHER),
     NULL("NULL", OTHER)
 
     ;

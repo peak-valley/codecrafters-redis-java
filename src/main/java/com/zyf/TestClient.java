@@ -18,21 +18,22 @@ public class TestClient {
     static OutputStream outputStream = null;
     public static void main(String[] args) {
         executorService = Executors.newFixedThreadPool(1);
-        try {
-            client = new Socket("localhost", mainPort);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-//        server();
-        client();
+//        try {
+//            client = new Socket("localhost", mainPort);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+        server();
+//        client();
     }
 // --replicaof localhost 6379
     private static void server() {
         try {
-            ServerSocket serverSocket = new ServerSocket(6379);
+            ServerSocket serverSocket = new ServerSocket(mainPort);
             Socket socket = serverSocket.accept();
             OutputStream outputStream = socket.getOutputStream();
             InputStream inputStream = socket.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             byte[] b = new byte[1024];
             int read;
 
@@ -41,6 +42,13 @@ public class TestClient {
                 System.out.println(s);
                 if (s.contains("PSYNC")) {
                     outputStream.write("+FULLRESYNC 8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb 0\r\n".getBytes());
+                    set(outputStream, bufferedReader);
+                    String s1 = "";
+                    s1 = bufferedReader.readLine();
+                    System.out.println(s1);
+                    if((s1 = bufferedReader.readLine()) != null) {
+                        System.out.printf(s1);
+                    }
                 }
             }
         } catch (IOException e) {

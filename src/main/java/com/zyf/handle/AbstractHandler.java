@@ -1,8 +1,10 @@
-package com.zyf;
+package com.zyf.handle;
 
+import com.zyf.CommandFactory;
+import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.Constants;
+import com.zyf.Protocol;
 import com.zyf.cluster.Master;
-import com.zyf.infomation.RedisInformation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,15 +13,16 @@ import java.net.Socket;
 import java.util.Base64;
 import java.util.List;
 
-public class Handler {
+public abstract class AbstractHandler implements IHandler{
 
     private final Socket clientSocket;
     CommandFactory commandFactory = new CommandFactory();
 
-    public Handler(Socket clientSocket) {
+    public AbstractHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
+    @Override
     public void handle() {
         try(
                 InputStream inputStream = clientSocket.getInputStream();
@@ -58,7 +61,9 @@ public class Handler {
                     System.out.printf("respose is null");
                     continue;
                 }
-                outputStream.write(response);
+
+                reply(CommandEnum.valueOf(c), outputStream, response);
+
                 if (c.equals(Constants.PSYNC)) {
                     System.out.println("send empty RDB");
 //                    sendRDBFile(outputStream);
@@ -76,28 +81,6 @@ public class Handler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private void sendRDBFile(OutputStream outputStream){
-        byte[] decoded_db = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
-        String prefix = "$" + decoded_db.length + "\r\n";
-        byte[] prefixBytes = prefix.getBytes();
-        try {
-            outputStream.write(prefixBytes);
-            outputStream.write(decoded_db);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public byte[] buildBulkResponse(String content) {
-        int length = content.length();
-        StringBuilder sb = new StringBuilder();
-        String ret = "$" + length + "\r\n" + content + "\r\n";
-        System.out.println("build response " + ret);
-//        byte[] ret = new byte[]
-//        ret.add((byte) '+');
-        return ret.getBytes();
     }
 
     public byte[] buildSimpleStrResponse(String content) {
