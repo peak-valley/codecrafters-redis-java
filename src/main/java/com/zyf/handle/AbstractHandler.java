@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -40,6 +41,8 @@ public abstract class AbstractHandler implements IHandler{
                     if ("PING".equalsIgnoreCase(content.toUpperCase())) {
                         System.out.println("ping data reception");
                         response = buildSimpleStrResponse("PONG");
+                    } else {
+                        System.out.println("read RDB:" + Arrays.toString(bytes));
                     }
                 } else if (data instanceof List) {
                     final List<Object> content = (List<Object>) data;
@@ -58,7 +61,7 @@ public abstract class AbstractHandler implements IHandler{
                     System.out.println("error data type");
                 }
                 if (response == null) {
-                    System.out.printf("respose is null");
+                    System.out.println("response is null");
                     continue;
                 }
 

@@ -1,5 +1,7 @@
 package com.zyf;
 
+import com.zyf.Constant.Constants;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,6 +9,7 @@ import java.net.UnknownHostException;
 import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,20 +39,33 @@ public class TestClient {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             byte[] b = new byte[1024];
             int read;
-
+            boolean psync = false;
             while ((read = inputStream.read(b)) > 0) {
                 String s = new String(Arrays.copyOf(b, read));
                 System.out.println(s);
-                if (s.contains("PSYNC")) {
+                if (s.contains("ping")) {
+                    pong(outputStream, bufferedReader);
+                } else if (s.contains("REPLCONF")) {
+                    outputStream.write("+OK\r\n".getBytes());
+                } else if (s.contains("PSYNC")) {
                     outputStream.write("+FULLRESYNC 8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb 0\r\n".getBytes());
-                    set(outputStream, bufferedReader);
+                    byte[] decodeDB = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
+                    String prefix = "$" + decodeDB.length + "\r\n";
+
+                    outputStream.write(prefix.getBytes());
+                    outputStream.write(decodeDB);
+                    psync = true;
+                }
+                if (psync) {
                     String s1 = "";
-                    s1 = bufferedReader.readLine();
-                    System.out.println(s1);
+//                    s1 = bufferedReader.readLine();
+//                    System.out.println(s1);
+                    set(outputStream, bufferedReader);
                     if((s1 = bufferedReader.readLine()) != null) {
                         System.out.printf(s1);
                     }
                 }
+//                get(outputStream, bufferedReader);
             }
         } catch (IOException e) {
             e.printStackTrace();
