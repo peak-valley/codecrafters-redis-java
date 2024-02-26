@@ -10,8 +10,4 @@ public class Ping extends AbstractCommand {
     public byte[] execute(List<Object> content) {
         return buildBulkResponse("PONG");
     }
-
-    private void replicaOffset() {
-
-    }
 }

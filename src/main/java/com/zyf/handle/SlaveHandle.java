@@ -74,8 +74,8 @@ public class SlaveHandle extends AbstractHandler {
 
     @Override
     public void afterExecuting(CommandEnum commandEnum, OutputStream outputStream, Object data, byte[] response) {
-        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
-        if (s == null) {
+        int offset = ClusterInformation.getOffset();
+        if (offset == -1) {
             return;
         }
         if (CommandEnum.REPLCONF.equals(commandEnum)) {
@@ -86,7 +86,7 @@ public class SlaveHandle extends AbstractHandler {
         }
         List listData = (List) data;
         byte[] bytes = buildArraysResponse(listData);
-        int offset = Integer.parseInt(s) + bytes.length;
+        offset = ClusterInformation.offset(bytes.length);
         System.out.println(commandEnum.getName() + " offset add: " + offset);
         ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }

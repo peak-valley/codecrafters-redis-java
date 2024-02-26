@@ -26,14 +26,12 @@ public class ReplConf extends AbstractCommand {
     }
 
     private String getOffset() {
-        String s = ClusterInformation.get(REPLICA_OFFSET);
-        if (s == null) {
-            ClusterInformation.put(REPLICA_OFFSET, "0");
+        int offset = ClusterInformation.getOffset();
+        if (offset == -1) {
+            ClusterInformation.offset(1);
             return "0";
         }
-        int offset = Integer.parseInt(s);
-        String ret = String.valueOf(offset + 37);
-        ClusterInformation.put(REPLICA_OFFSET, ret);
+        String ret = String.valueOf(ClusterInformation.offset(37));
         return ret;
     }
 }
