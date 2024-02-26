@@ -1,5 +1,6 @@
 package com.zyf.commands;
 
+import com.zyf.cluster.ClusterInformation;
 import com.zyf.collect.KVString;
 import com.zyf.collect.SimpleKVCache;
 
@@ -12,6 +13,7 @@ public class Set extends AbstractCommand {
         if (content == null) {
             return "$-1\r\n".getBytes();
         }
+        setSlaveOffset(content);
         String key = new String((byte[])content.get(1));
         String value = new String((byte[])content.get(2));
         KVString kvString;
@@ -27,5 +29,23 @@ public class Set extends AbstractCommand {
         }
         SimpleKVCache.put(key, kvString);
         return buildSimpleStrResponse("OK");
+    }
+
+    private void setSlaveOffset(List<Object> content) {
+        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
+        if (s == null) {
+            return;
+        }
+        byte[] bytes = buildArraysResponse(content);
+        int offset = bytes.length + Integer.parseInt(s);
+//        int offset = Integer.parseInt(s);
+//        int size = content.size();
+//        offset += size * 2;
+//        for (Object o : content) {
+//            byte[] b = (byte[]) o;
+//            offset += b.length;
+//        }
+
+        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }
 }

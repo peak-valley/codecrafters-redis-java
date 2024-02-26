@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReplConf extends AbstractCommand {
-    final String REPLICA_OFFSET = "replicaOffset";
+    public static final String REPLICA_OFFSET = "replicaOffset";
     @Override
     public byte[] execute(List<Object> content) {
         System.out.println("REPLCONF is running");
@@ -31,8 +31,8 @@ public class ReplConf extends AbstractCommand {
             return "0";
         }
 
-        int offset = Integer.valueOf(s);
-        String ret = String.valueOf(offset + 30);
+        int offset = Integer.parseInt(s);
+        String ret = String.valueOf(offset + 37);
         ClusterInformation.put(REPLICA_OFFSET, ret);
         return ret;
     }

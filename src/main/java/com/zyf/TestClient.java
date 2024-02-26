@@ -54,8 +54,13 @@ public class TestClient {
                         if (i == 0) {
                             outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                             i++;
-                        } else if (i++ == 1) {
+                        } else if (i == 1) {
+                            i++;
                             ping(outputStream, bufferedReader);
+                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
+                        } else if (i == 2) {
+                            i++;
+                            set(outputStream, bufferedReader, "foo", "1");
                             outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                         }
 //                        ping(outputStream, bufferedReader);
@@ -176,6 +181,20 @@ public class TestClient {
     }
     private static void setExpire(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         String command = "*5\r\n$3\r\nset\r\n$6\r\nmangos\r\n$5\r\nhello\r\n$2\r\npX\r\n$4\r\n9000\r\n";
+//                String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+        char[] c;
+        int len = bufferedReader.read();
+        c = new char[len];
+        bufferedReader.read(c);
+        final String s = new String(c);
+        System.out.println(s);
+    }
+
+    private static void setReadReply(OutputStream outputStream, BufferedReader bufferedReader, String k, String v) throws IOException {
+        String command = "*3\r\n$3\r\nset\r\n$"+k.length()+"\r\n" + k + "\r\n$"+v.length()+"\r\n"+v+"\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";
