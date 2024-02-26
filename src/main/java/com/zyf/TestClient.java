@@ -21,13 +21,9 @@ public class TestClient {
     static OutputStream outputStream = null;
     public static void main(String[] args) {
         executorService = Executors.newFixedThreadPool(1);
-//        try {
-//            client = new Socket("localhost", mainPort);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-        server();
-//        client();
+
+//        server();
+        client();
     }
 // --replicaof localhost 6379
     private static void server() {
@@ -99,6 +95,11 @@ public class TestClient {
 
     private static void client() {
         try {
+                    try {
+            client = new Socket("localhost", mainPort);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
                 outputStream = client.getOutputStream();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             for (int i = 0; i < 1; i++) {
@@ -106,12 +107,13 @@ public class TestClient {
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-                set(outputStream, bufferedReader, "foo", "123");
-                set(outputStream, bufferedReader, "bar", "2123");
-                set(outputStream, bufferedReader, "foo", "24523");
+//                set(outputStream, bufferedReader, "foo", "123");
+//                set(outputStream, bufferedReader, "bar", "2123");
+//                set(outputStream, bufferedReader, "foo", "24523");
 //                get(outputStream, bufferedReader);
 //                info(outputStream, bufferedReader);
                 new Thread(() -> print(bufferedReader)).start();
+                wait(outputStream, bufferedReader);
 //                psync(outputStream, bufferedReader);
 
             }
@@ -132,6 +134,20 @@ public class TestClient {
                 }
             }
         }
+
+    private static void wait(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*3\r\n$4\r\nwait\r\n$1\r\n0\r\n$5\r\n60000\r\n";
+//                String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+        char[] c;
+        int len = bufferedReader.read();
+        c = new char[len];
+        bufferedReader.read(c);
+        final String s = new String(c);
+        System.out.println(s);
+    }
 
     private static void psync(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         List<String> sendContent = Arrays.asList("PSYNC", "?", "-1");
