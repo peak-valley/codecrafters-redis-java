@@ -1,6 +1,7 @@
 package com.zyf.commands;
 
 import com.zyf.cluster.ClusterInformation;
+import com.zyf.handle.SlaveHandle;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,10 +31,11 @@ public class ReplConf extends AbstractCommand {
             ClusterInformation.put(REPLICA_OFFSET, "0");
             return "0";
         }
-
-        int offset = Integer.parseInt(s);
-        String ret = String.valueOf(offset + 37);
-        ClusterInformation.put(REPLICA_OFFSET, ret);
-        return ret;
+        synchronized (SlaveHandle.class) {
+            int offset = Integer.parseInt(s);
+            String ret = String.valueOf(offset + 37);
+            ClusterInformation.put(REPLICA_OFFSET, ret);
+            return ret;
+        }
     }
 }

@@ -74,21 +74,23 @@ public class SlaveHandle extends AbstractHandler {
 
     @Override
     public void afterExecuting(CommandEnum commandEnum, OutputStream outputStream, Object data, byte[] response) {
-        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
-        if (s == null) {
-            return;
+        synchronized (SlaveHandle.class) {
+            String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
+            if (s == null) {
+                return;
+            }
+            if (CommandEnum.REPLCONF.equals(commandEnum)) {
+                return;
+            }
+            if (!(data instanceof List)) {
+                return;
+            }
+            List listData = (List) data;
+            byte[] bytes = buildArraysResponse(listData);
+            int offset = Integer.parseInt(s) + bytes.length;
+            System.out.println(commandEnum.getName() + " offset add: " + offset);
+            ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
         }
-        if (CommandEnum.REPLCONF.equals(commandEnum)) {
-            return;
-        }
-        if (!(data instanceof List)) {
-            return;
-        }
-        List listData = (List) data;
-        byte[] bytes = buildArraysResponse(listData);
-        int offset = Integer.parseInt(s) + bytes.length;
-        System.out.println(commandEnum.getName() + " offset add: " + offset);
-        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }
 
     public byte[] buildArraysResponse(List<Object> data) {

@@ -4,6 +4,7 @@ import com.zyf.CommandFactory;
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.Constants;
 import com.zyf.Protocol;
+import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
 
 import java.io.IOException;
@@ -71,8 +72,9 @@ public abstract class AbstractHandler implements IHandler{
                 } else {
                     System.out.println("error data type");
                 }
-
-                afterExecuting(CommandEnum.valueOf(c), outputStream,data, response);
+                String finalC = c;
+                byte[] finalResponse = response;
+                ThreadPool.execute(() -> afterExecuting(CommandEnum.valueOf(finalC), outputStream, data, finalResponse));
 
                 if (response == null) {
                     System.out.println("response is null");
