@@ -31,11 +31,9 @@ public class ReplConf extends AbstractCommand {
             ClusterInformation.put(REPLICA_OFFSET, "0");
             return "0";
         }
-        synchronized (SlaveHandle.class) {
-            int offset = Integer.parseInt(s);
-            String ret = String.valueOf(offset + 37);
-            ClusterInformation.put(REPLICA_OFFSET, ret);
-            return ret;
-        }
+        int offset = Integer.parseInt(s);
+        String ret = String.valueOf(offset + 37);
+        ClusterInformation.put(REPLICA_OFFSET, ret);
+        return ret;
     }
 }
