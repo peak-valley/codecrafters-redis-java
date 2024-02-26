@@ -17,7 +17,7 @@ public class Ping extends AbstractCommand {
         if (s == null) {
             return;
         }
-        int offset = Integer.parseInt(s) + 14;
+        int offset = Integer.parseInt(s) + PING_OFFSET;
         System.out.println("PING offset put: " + offset);
         ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }

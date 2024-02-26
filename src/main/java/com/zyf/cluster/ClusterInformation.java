@@ -1,10 +1,11 @@
 package com.zyf.cluster;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClusterInformation {
-    private static Map<String, String> cache = new ConcurrentHashMap<>();
+    private static Map<String, String> cache = new HashMap<>();
 
     public static void put(String k, String v) {
         cache.put(k, v);
