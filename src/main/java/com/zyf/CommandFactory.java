@@ -19,6 +19,7 @@ public class CommandFactory {
         commandCache.put(Constants.REPLCONF, new ReplConf());
         commandCache.put(Constants.PSYNC, new Psync());
         commandCache.put(Constants.FULLRESYNC, new FullResync());
+        commandCache.put(Constants.WAIT, new Wait());
     }
 
     public byte[] execute(String command, List<Object> content) {

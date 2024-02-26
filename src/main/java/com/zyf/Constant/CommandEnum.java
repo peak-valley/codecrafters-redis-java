@@ -11,6 +11,7 @@ public enum CommandEnum {
     PSYNC("PSYNC", OTHER),
     PING("PING", READ),
     FULLRESYNC("FULLRESYNC", OTHER),
+    WAIT("WAIT", OTHER),
     NULL("NULL", OTHER)
 
     ;

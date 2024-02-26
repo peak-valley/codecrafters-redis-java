@@ -19,4 +19,5 @@ public interface Constants {
     String REPLCONF = "REPLCONF";
     String PSYNC = "PSYNC";
     String FULLRESYNC = "FULLRESYNC";
+    String WAIT = "WAIT";
 }
