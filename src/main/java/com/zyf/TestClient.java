@@ -40,13 +40,26 @@ public class TestClient {
             byte[] b = new byte[1024];
             int read;
             boolean psync = false;
+            int i = 0;
             while ((read = inputStream.read(b)) > 0) {
                 String s = new String(Arrays.copyOf(b, read));
                 System.out.println(s);
                 if (s.contains("ping")) {
                     pong(outputStream, bufferedReader);
                 } else if (s.contains("REPLCONF")) {
-                    outputStream.write("+OK\r\n".getBytes());
+                    if (s.contains("capa") || s.contains("listening-port")) {
+                        outputStream.write("+OK\r\n".getBytes());
+                    }
+                    if (s.contains("ACK")) {
+                        if (i == 0) {
+                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
+                            i++;
+                        } else if (i++ == 1) {
+                            ping(outputStream, bufferedReader);
+                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
+                        }
+//                        ping(outputStream, bufferedReader);
+                    }
                 } else if (s.contains("PSYNC")) {
                     outputStream.write("+FULLRESYNC 8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb 0\r\n".getBytes());
                     byte[] decodeDB = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);
@@ -200,6 +213,19 @@ public class TestClient {
         final String s = new String(c);
         System.out.println(s);
     }
+    private static void pingNotRead(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+        char[] c;
+        int len = bufferedReader.read();
+        c = new char[len];
+        bufferedReader.read(c);
+        final String s = new String(c);
+        System.out.println(s);
+    }
+
 
     private static void echo(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";

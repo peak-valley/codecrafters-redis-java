@@ -1,11 +1,14 @@
 package com.zyf.commands;
 
+import com.zyf.cluster.ClusterInformation;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 public class ReplConf extends AbstractCommand {
+    final String REPLICA_OFFSET = "replicaOffset";
     @Override
     public byte[] execute(List<Object> content) {
         System.out.println("REPLCONF is running");
@@ -15,9 +18,22 @@ public class ReplConf extends AbstractCommand {
         String param1 = new String((byte[]) content.get(1));
         if ("GETACK".equals(param1)) {
             List<Object> c = new ArrayList<>();
-            boolean b = Collections.addAll(c, "REPLCONF", "ACK", "0");
+            boolean b = Collections.addAll(c, "REPLCONF", "ACK", getOffset());
             return buildArraysResponse(c);
         }
         return buildSimpleStrResponse("OK");
+    }
+
+    private String getOffset() {
+        String s = ClusterInformation.get(REPLICA_OFFSET);
+        if (s == null) {
+            ClusterInformation.put(REPLICA_OFFSET, "0");
+            return "0";
+        }
+
+        int offset = Integer.valueOf(s);
+        String ret = String.valueOf(offset + 30);
+        ClusterInformation.put(REPLICA_OFFSET, ret);
+        return ret;
     }
 }
