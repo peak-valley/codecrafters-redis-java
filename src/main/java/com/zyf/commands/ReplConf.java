@@ -1,5 +1,8 @@
 package com.zyf.commands;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ReplConf extends AbstractCommand {
@@ -11,7 +14,9 @@ public class ReplConf extends AbstractCommand {
         }
         String param1 = new String((byte[]) content.get(1));
         if ("GETACK".equals(param1)) {
-            return buildArraysResponse(List.of("REPLCONF", "ACK", "0"));
+            List<Object> c = new ArrayList<>();
+            boolean b = Collections.addAll(c, "REPLCONF", "ACK", "0");
+            return buildArraysResponse(c);
         }
         return buildSimpleStrResponse("OK");
     }

@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -27,12 +25,17 @@ public class Protocol {
         }
         byte b = aByte;
 //        System.out.println("process read b:" + Arrays.toString(Character.toChars(b)));
-        return switch (b) {
-            case DOLLAR_BYTE -> processBulkReply(inputStream);
-            case START_BYTE -> processMultiBulkReply(inputStream);
-            case PLUS_BYTE -> processSimpleReply(inputStream);
-            default -> throw new IOException("Unknown reply:" + b);
-        };
+
+        switch (b) {
+            case DOLLAR_BYTE:
+                return processBulkReply(inputStream);
+            case START_BYTE:
+                return processMultiBulkReply(inputStream);
+            case PLUS_BYTE:
+                return processSimpleReply(inputStream);
+            default:
+                throw new IOException("Unknown reply:" + b);
+        }
     }
 
     private static Object processSimpleReply(InputStream inputStream) {

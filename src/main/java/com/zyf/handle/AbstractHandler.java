@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -62,10 +63,13 @@ public abstract class AbstractHandler implements IHandler{
                     if (Master.getMaster() != null) {
                         Master.getMaster().send(content);
                     }
-                } else if (data instanceof String content){
+                } else if (data instanceof String){
+                    String content = (String) data;
                     String[] strings = content.split(" ");
                     c = strings[0].toUpperCase();
-                    response = commandFactory.execute(c, List.of(strings));
+                    List<Object> objects = new ArrayList<>();
+                    objects.add(strings);
+                    response = commandFactory.execute(c, objects);
                 } else {
                     System.out.println("error data type");
                 }

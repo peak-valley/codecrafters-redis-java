@@ -32,17 +32,7 @@ public class Slave {
 
     public void init() {
         SlaveHandle slaveHandle = new SlaveHandle(masterClient, inputStream, outputStream);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        slaveHandle.init(reader);
-        ThreadPool.execute(slaveHandle::handle);
-        try {
-            System.out.println(reader.readLine());
-            System.out.println(reader.readLine());
-            System.out.println(reader.readLine());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        slaveHandle.init();
     }
 
     public void print(BufferedReader br) throws IOException {
