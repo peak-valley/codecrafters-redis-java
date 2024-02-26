@@ -163,6 +163,9 @@ public class SlaveHandle extends AbstractHandler {
         if (s == null) {
             return;
         }
+        if (CommandEnum.REPLCONF.equals(commandEnum)) {
+            return;
+        }
         int offset = Integer.parseInt(s) + response.length;
         System.out.println(commandEnum.getName() + " offset add: " + offset);
         ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
