@@ -72,7 +72,7 @@ public class TestClient {
 
                     outputStream.write(prefix.getBytes());
                     outputStream.write(decodeDB);
-//                    psync = true;
+                    psync = true;
 //                    ping(outputStream, bufferedReader);
                     outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                 }
