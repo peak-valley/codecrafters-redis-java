@@ -14,6 +14,7 @@ public class Ping extends AbstractCommand {
             replica = false;
             return null;
         }
+//
         return buildBulkResponse("PONG");
     }
 
