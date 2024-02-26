@@ -39,8 +39,6 @@ public abstract class AbstractHandler implements IHandler{
                 inputStream = clientSocket.getInputStream();
                 outputStream = clientSocket.getOutputStream();
             }
-            byte[] bs = new byte[1024];
-            int read;
             String c = "";
             while (true) {
                 final Object data = Protocol.process(inputStream);
