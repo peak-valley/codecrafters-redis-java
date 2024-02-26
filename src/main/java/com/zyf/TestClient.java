@@ -22,8 +22,8 @@ public class TestClient {
     public static void main(String[] args) {
         executorService = Executors.newFixedThreadPool(1);
 
-//        server();
-        client();
+        server();
+//        client();
     }
 // --replicaof localhost 6379
     private static void server() {
@@ -48,16 +48,17 @@ public class TestClient {
                     }
                     if (s.contains("ACK")) {
                         if (i == 0) {
+                            pingNotRead(outputStream, bufferedReader);
                             outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                             i++;
                         } else if (i == 1) {
                             i++;
-                            ping(outputStream, bufferedReader);
+                            set(outputStream, bufferedReader, "l27x2yrsav8", "dy85j0bw6sx2");
+                            set(outputStream, bufferedReader, "xhwi9x5791fsstzf", "7ekoe2");
                             outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
-                        } else if (i == 2) {
-                            i++;
-                            set(outputStream, bufferedReader, "foo", "1");
-                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
+//                        } else if (i == 2) {
+//                            i++;
+//                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
                         }
 //                        ping(outputStream, bufferedReader);
                     }
@@ -76,15 +77,22 @@ public class TestClient {
 //                    String s1 = "";
 ////                    s1 = bufferedReader.readLine();
 ////                    System.out.println(s1);
+//                    set(outputStream, bufferedReader, "foo", "123");
 //                    Socket socket1 = new Socket("localhost", 6379);
 //                    OutputStream outputStream1 = socket1.getOutputStream();
 //                    InputStream inputStream1 = socket1.getInputStream();
 //                    BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream));
-//                    set(outputStream1, bufferedReader1, "foo", "123");
 //                    set(outputStream1, bufferedReader1, "bar", "2123");
 //                    set(outputStream1, bufferedReader1, "baz", "24523");
-//
+////
 //                    get(outputStream1, bufferedReader1, "foo");
+//                    new Thread(() -> print(bufferedReader)).start();
+//                    new Thread(() -> print(bufferedReader1)).start();
+//                    try {
+//                        Thread.sleep(100000);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
 //                }
 //                get(outputStream, bufferedReader);
             }
@@ -188,12 +196,12 @@ public class TestClient {
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";
         outputStream.write(command.getBytes());
-        char[] c;
-        int len = bufferedReader.read();
-        c = new char[len];
-        bufferedReader.read(c);
-        final String s = new String(c);
-        System.out.println(s);
+//        char[] c;
+//        int len = bufferedReader.read();
+//        c = new char[len];
+//        bufferedReader.read(c);
+//        final String s = new String(c);
+//        System.out.println(s);
     }
     private static void setExpire(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         String command = "*5\r\n$3\r\nset\r\n$6\r\nmangos\r\n$5\r\nhello\r\n$2\r\npX\r\n$4\r\n9000\r\n";
@@ -253,12 +261,6 @@ public class TestClient {
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";
         outputStream.write(command.getBytes());
-        char[] c;
-        int len = bufferedReader.read();
-        c = new char[len];
-        bufferedReader.read(c);
-        final String s = new String(c);
-        System.out.println(s);
     }
 
 

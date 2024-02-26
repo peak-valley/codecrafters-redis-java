@@ -71,6 +71,9 @@ public abstract class AbstractHandler implements IHandler{
                 } else {
                     System.out.println("error data type");
                 }
+
+                afterExecuting(CommandEnum.valueOf(c), outputStream,data, response);
+
                 if (response == null) {
                     System.out.println("response is null");
                     continue;
@@ -97,6 +100,8 @@ public abstract class AbstractHandler implements IHandler{
         }
     }
 
+    public abstract void afterExecuting(CommandEnum commandEnum, OutputStream outputStream, Object requestData,
+                                        byte[] response);
     public byte[] buildSimpleStrResponse(String content) {
         return ("+" + content + "\r\n").getBytes();
     }

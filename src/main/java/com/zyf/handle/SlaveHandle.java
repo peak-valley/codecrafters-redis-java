@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
+import static com.zyf.Constant.Constants._R_N;
 import static com.zyf.Protocol.*;
 
 public class SlaveHandle extends AbstractHandler {
@@ -69,6 +70,41 @@ public class SlaveHandle extends AbstractHandler {
             e.printStackTrace();
         }
         super.handle();
+    }
+
+    @Override
+    public void afterExecuting(CommandEnum commandEnum, OutputStream outputStream, Object data, byte[] response) {
+        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
+        if (s == null) {
+            return;
+        }
+        if (CommandEnum.REPLCONF.equals(commandEnum)) {
+            return;
+        }
+        if (!(data instanceof List)) {
+            return;
+        }
+        List listData = (List) data;
+        byte[] bytes = buildArraysResponse(listData);
+        int offset = Integer.parseInt(s) + bytes.length;
+        System.out.println(commandEnum.getName() + " offset add: " + offset);
+        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
+    }
+
+    public byte[] buildArraysResponse(List<Object> data) {
+
+        StringBuilder command = new StringBuilder("*" + data.size() + _R_N);
+        for (Object o : data) {
+            if (o instanceof String) {
+                String o1 = (String) o;
+                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+            }else {
+                String o1 = new String((byte[]) o);
+                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+            }
+        }
+        System.out.println("build command ->" + command);
+        return command.toString().getBytes();
     }
 
     public void print(InputStream is) throws IOException {
@@ -159,15 +195,5 @@ public class SlaveHandle extends AbstractHandler {
         } else {
             outputStream.write(response);
         }
-        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
-        if (s == null) {
-            return;
-        }
-        if (CommandEnum.REPLCONF.equals(commandEnum)) {
-            return;
-        }
-        int offset = Integer.parseInt(s) + response.length;
-        System.out.println(commandEnum.getName() + " offset add: " + offset);
-        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }
 }

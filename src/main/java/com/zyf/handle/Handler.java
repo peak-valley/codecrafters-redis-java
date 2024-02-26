@@ -15,10 +15,13 @@ import java.util.List;
 
 public class Handler extends AbstractHandler {
 
-    CommandFactory commandFactory = new CommandFactory();
-
     public Handler(Socket clientSocket) {
         super(clientSocket);
+    }
+
+    @Override
+    public void afterExecuting(CommandEnum commandEnum, OutputStream outputStream, Object data, byte[] response) {
+        // nothing
     }
 
     @Override
