@@ -13,8 +13,8 @@ public class Set extends AbstractCommand {
         if (content == null) {
             return "$-1\r\n".getBytes();
         }
-        String key = new String((byte[])content.get(1));
-        String value = new String((byte[])content.get(2));
+        byte[] key = (byte[])content.get(1);
+        byte[] value = (byte[])content.get(2);
         KVString kvString;
         if (content.size() >= 4) {
             String px = new String((byte[])content.get(3));
@@ -28,19 +28,19 @@ public class Set extends AbstractCommand {
         }
         SimpleKVCache.put(key, kvString);
 
-//        setSlaveOffset(content);
+        setSlaveOffset(content);
 
         return buildSimpleStrResponse("OK");
     }
 
-//    private void setSlaveOffset(List<Object> content) {
-//        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
-//        if (s == null) {
-//            return;
-//        }
-//        byte[] bytes = buildArraysResponse(content);
-//        int offset = Integer.parseInt(s) + bytes.length;
-//        System.out.println("Set offset add: " + offset);
-//        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
-//    }
+    private void setSlaveOffset(List<Object> content) {
+        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
+        if (s == null) {
+            return;
+        }
+        byte[] bytes = buildArraysResponse(content);
+        int offset = Integer.parseInt(s) + bytes.length;
+        System.out.println("Set offset add: " + offset);
+        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
+    }
 }

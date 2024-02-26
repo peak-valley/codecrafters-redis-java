@@ -10,7 +10,7 @@ import java.util.List;
 public class Get extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
-        final String key = new String((byte[]) content.get(1));
+        final byte[] key = (byte[]) content.get(1);
         System.out.println("get command param:" + key);
         final KVString kvString = SimpleKVCache.get(key);
         if (kvString == null) {
@@ -23,7 +23,7 @@ public class Get extends AbstractCommand {
             return Constants.NULL_BULK_STRING_BYTES;
         } else {
             System.out.println("value is " + kvString.getV());
-            return buildBulkResponse(kvString.getV());
+            return buildBulkByteResponse(kvString.getV());
         }
     }
 
