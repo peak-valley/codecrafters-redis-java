@@ -4,35 +4,35 @@ import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 public class KVString {
-    byte[] k;
-    byte[] v;
+    String k;
+    String v;
     LocalDateTime expire;
 
-    public KVString(byte[] k, byte[] v) {
+    public KVString(String k, String v) {
         this.k = k;
         this.v = v;
     }
 
-    public KVString(byte[] k, byte[] v, long milliseconds) {
+    public KVString(String k, String v, long milliseconds) {
         this.k = k;
         this.v = v;
         final long l = TimeUnit.MILLISECONDS.toSeconds(milliseconds);
         this.expire = LocalDateTime.now().plusNanos(TimeUnit.MILLISECONDS.toNanos(milliseconds));
     }
 
-    public byte[] getK() {
+    public String getK() {
         return k;
     }
 
-    public void setK(byte[] k) {
+    public void setK(String k) {
         this.k = k;
     }
 
-    public byte[] getV() {
+    public String getV() {
         return v;
     }
 
-    public void setV(byte[] v) {
+    public void setV(String v) {
         this.v = v;
     }
 

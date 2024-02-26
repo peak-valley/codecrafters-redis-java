@@ -13,8 +13,8 @@ public class Set extends AbstractCommand {
         if (content == null) {
             return "$-1\r\n".getBytes();
         }
-        byte[] key = (byte[])content.get(1);
-        byte[] value = (byte[])content.get(2);
+        String key = new String((byte[])content.get(1));
+        String value = new String((byte[])content.get(2));
         KVString kvString;
         if (content.size() >= 4) {
             String px = new String((byte[])content.get(3));
