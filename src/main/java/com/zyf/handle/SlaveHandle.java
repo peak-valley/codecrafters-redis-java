@@ -3,6 +3,8 @@ package com.zyf.handle;
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.CommandType;
 import com.zyf.ThreadPool;
+import com.zyf.cluster.ClusterInformation;
+import com.zyf.commands.ReplConf;
 import com.zyf.infomation.RedisInformation;
 
 import java.io.*;
@@ -157,5 +159,12 @@ public class SlaveHandle extends AbstractHandler {
         } else {
             outputStream.write(response);
         }
+        String s = ClusterInformation.get(ReplConf.REPLICA_OFFSET);
+        if (s == null) {
+            return;
+        }
+        int offset = Integer.parseInt(s) + response.length;
+        System.out.println(commandEnum.getName() + " offset add: " + offset);
+        ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }
 }
