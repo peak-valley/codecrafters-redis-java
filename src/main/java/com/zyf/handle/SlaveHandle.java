@@ -85,8 +85,8 @@ public class SlaveHandle extends AbstractHandler {
             return;
         }
         List listData = (List) data;
-//        byte[] bytes = buildArraysResponse(listData);
-        int offset = Integer.parseInt(s) + listData.size();
+        byte[] bytes = buildArraysResponse(listData);
+        int offset = Integer.parseInt(s) + bytes.length;
         System.out.println(commandEnum.getName() + " offset add: " + offset);
         ClusterInformation.put(ReplConf.REPLICA_OFFSET, String.valueOf(offset));
     }
