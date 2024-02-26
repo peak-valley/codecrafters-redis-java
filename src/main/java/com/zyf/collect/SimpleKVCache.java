@@ -1,10 +1,11 @@
 package com.zyf.collect;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SimpleKVCache {
-    public static Map<String, KVString> kvStore = new ConcurrentHashMap<>();
+    public static final Map<String, KVString> kvStore = new HashMap<>();
 
     public static KVString get(String key) {
         return kvStore.get(key);
