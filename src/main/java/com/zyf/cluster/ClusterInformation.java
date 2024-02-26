@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClusterInformation {
-    private static Map<String, String> cache = new HashMap<>();
+    private static final Map<String, String> cache = new HashMap<>();
 
     public static void put(String k, String v) {
         cache.put(k, v);
