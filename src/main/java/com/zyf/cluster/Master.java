@@ -58,7 +58,7 @@ public class Master {
         }
     }
 
-    public void send(List<Object> data) {
+    public void send(List<Object> data, String command) {
         if(!checkWrite(new String((byte[]) data.get(0)))) {
             return;
         }
@@ -67,6 +67,7 @@ public class Master {
             GlobalBlocker.pass();
             return;
         }
+        System.out.printf("start send " + command);
         sendCommands.incrementAndGet();
         byte[] b = buildArraysCommand(data);
         for (int i = 0; i < slaveList.size(); i++) {
