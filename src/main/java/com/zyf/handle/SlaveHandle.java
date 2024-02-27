@@ -84,6 +84,7 @@ public class SlaveHandle extends AbstractHandler {
         if (!(data instanceof List)) {
             return;
         }
+
         List listData = (List) data;
         byte[] bytes = buildArraysResponse(listData);
         offset = ClusterInformation.offset(bytes.length);
