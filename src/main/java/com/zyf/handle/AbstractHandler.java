@@ -65,7 +65,7 @@ public abstract class AbstractHandler implements IHandler{
                     c = command;
                     response = commandFactory.execute(command, content);
                     if (Master.getMaster() != null) {
-                        ThreadPool.execute(() -> Master.getMaster().send(content, command));
+                        Master.getMaster().send(content, command);
                     }
                 } else if (data instanceof String){
                     String content = (String) data;
