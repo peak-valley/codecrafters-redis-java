@@ -23,7 +23,7 @@ public class Config extends AbstractCommand {
             Collections.addAll(list, param1, v);
             return buildArraysResponse(list);
         }
-
+        System.out.println("CONFIG -> not config");
         return "-ERR\r\n".getBytes();
     }
 }
