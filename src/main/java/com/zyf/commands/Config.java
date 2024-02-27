@@ -1,7 +1,5 @@
 package com.zyf.commands;
 
-import com.zyf.Constant.Constants;
-import com.zyf.collect.SimpleKVCache;
 import com.zyf.rdb.RDBCache;
 
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.List;
 public class Config extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
-        if (content.size() <= 2) {
+        if (content.size() != 3) {
             return null;
         }
 
@@ -21,7 +19,7 @@ public class Config extends AbstractCommand {
         if ("GET".equals(param1)) {
             String v = RDBCache.get(param2);
             List<Object> list = new ArrayList<>();
-            System.out.println("CONFIG value is" +v);
+            System.out.println("CONFIG value is" + v);
             Collections.addAll(list, param1, v);
             return buildArraysResponse(list);
         }
