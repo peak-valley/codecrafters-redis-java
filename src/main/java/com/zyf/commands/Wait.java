@@ -1,5 +1,6 @@
 package com.zyf.commands;
 
+import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
 import com.zyf.concurrent.GlobalBlocker;
 
@@ -15,10 +16,11 @@ public class Wait extends AbstractCommand {
         GlobalBlocker.await();
         Master master = Master.getMaster();
         List<Object> list = new ArrayList<>();
-        System.out.println("Wait -> send REPLCONF command to slave");
-        Collections.addAll(list, "REPLCONF", "GETACK", "*");
-        master.send(buildArraysResponse(list));
-
+        ThreadPool.execute(() -> {
+            System.out.println("Wait -> send REPLCONF command to slave");
+            Collections.addAll(list, "REPLCONF", "GETACK", "*");
+            master.send(buildArraysResponse(list));
+        });
         int i = master.slaveSize();
         byte[] bytes = buildIntegerResponse(i);
         if (!Master.getMaster().presenceSendCommands()) {
