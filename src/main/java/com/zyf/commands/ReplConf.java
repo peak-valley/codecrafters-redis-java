@@ -22,6 +22,7 @@ public class ReplConf extends AbstractCommand {
         } else if ("ACK".equals(param1)) {
             System.out.println("ReplConf -> recevied ACK");
             Wait.incrementAck();
+            return null;
         }
         return buildSimpleStrResponse("OK");
     }
