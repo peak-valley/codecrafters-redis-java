@@ -12,6 +12,7 @@ public enum CommandEnum {
     PING("PING", READ),
     FULLRESYNC("FULLRESYNC", OTHER),
     WAIT("WAIT", OTHER),
+    CONFIG("CONFIG", OTHER),
     NULL("NULL", OTHER)
 
     ;

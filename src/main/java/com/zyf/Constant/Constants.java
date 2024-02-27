@@ -10,14 +10,7 @@ public interface Constants {
     // data
     String NULL_BULK_STRING = "$-1" + _R_N;
     byte[] NULL_BULK_STRING_BYTES = NULL_BULK_STRING.getBytes();
-    // command
-    String GET = "GET";
-    String PING = "PING";
-    String SET = "SET";
-    String ECHO = "ECHO";
-    String INFO = "INFO";
-    String REPLCONF = "REPLCONF";
-    String PSYNC = "PSYNC";
-    String FULLRESYNC = "FULLRESYNC";
-    String WAIT = "WAIT";
+    // RDB
+    String RDB_DIR = "dir";
+    String RDB_FILENAME = "dbfilename";
 }

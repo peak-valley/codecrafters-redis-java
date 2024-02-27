@@ -89,7 +89,7 @@ public abstract class AbstractHandler implements IHandler{
 
                 reply(CommandEnum.valueOf(c), outputStream, response);
 
-                if (c.equals(Constants.PSYNC)) {
+                if (c.equals(CommandEnum.PSYNC.getName())) {
                     System.out.println("send empty RDB");
 //                    sendRDBFile(outputStream);
                     byte[] decodeDB = Base64.getDecoder().decode(Constants.EMPTY_RDB_BASE64);

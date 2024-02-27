@@ -1,6 +1,7 @@
 package com.zyf;
 
 import com.zyf.Constant.Constants;
+import com.zyf.Constant.CommandEnum;
 import com.zyf.commands.*;
 
 import java.util.HashMap;
@@ -11,15 +12,16 @@ public class CommandFactory {
     Map<String, Command> commandCache = new HashMap<>();
 
     public CommandFactory() {
-        commandCache.put(Constants.GET, new Get());
-        commandCache.put(Constants.SET, new Set());
-        commandCache.put(Constants.ECHO, new Echo());
-        commandCache.put(Constants.PING, new Ping());
-        commandCache.put(Constants.INFO, new Info());
-        commandCache.put(Constants.REPLCONF, new ReplConf());
-        commandCache.put(Constants.PSYNC, new Psync());
-        commandCache.put(Constants.FULLRESYNC, new FullResync());
-        commandCache.put(Constants.WAIT, new Wait());
+        commandCache.put(CommandEnum.GET.getName(), new Get());
+        commandCache.put(CommandEnum.SET.getName(), new Set());
+        commandCache.put(CommandEnum.ECHO.getName(), new Echo());
+        commandCache.put(CommandEnum.PING.getName(), new Ping());
+        commandCache.put(CommandEnum.INFO.getName(), new Info());
+        commandCache.put(CommandEnum.REPLCONF.getName(), new ReplConf());
+        commandCache.put(CommandEnum.PSYNC.getName(), new Psync());
+        commandCache.put(CommandEnum.FULLRESYNC.getName(), new FullResync());
+        commandCache.put(CommandEnum.WAIT.getName(), new Wait());
+        commandCache.put(CommandEnum.CONFIG.getName(), new CONFIG());
     }
 
     public byte[] execute(String command, List<Object> content) {

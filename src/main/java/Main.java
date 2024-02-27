@@ -5,6 +5,7 @@ import com.zyf.cluster.ClusterInformation;
 import com.zyf.cluster.Master;
 import com.zyf.cluster.Slave;
 import com.zyf.infomation.RedisInformation;
+import com.zyf.rdb.RDBCache;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -71,6 +72,10 @@ public class Main {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else if ("--dir".equals(args[i])) {
+                RDBCache.put("dir", args[++i]);
+            } else if ("--dbfilename".equals(args[i])) {
+                RDBCache.put("dbfilename", args[++i]);
             }
         }
 
