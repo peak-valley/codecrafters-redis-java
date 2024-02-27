@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
 import static com.zyf.Constant.Constants._R_N;
@@ -190,7 +191,7 @@ public class SlaveHandle extends AbstractHandler {
     }
 
     @Override
-    public void reply(CommandEnum commandEnum, OutputStream outputStream, Object sendData, byte[] response) throws IOException {
+    public void reply(CommandEnum commandEnum, OutputStream outputStream, byte[] response) throws IOException {
         if (CommandType.WRITE.equals(commandEnum.getType())) {
             System.out.println("The slave's write command cancels the reply");
         } else if(CommandEnum.PING.equals(commandEnum)) {

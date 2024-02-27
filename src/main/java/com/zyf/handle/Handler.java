@@ -3,7 +3,6 @@ package com.zyf.handle;
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.CommandType;
 import com.zyf.cluster.ClusterInformation;
-import com.zyf.cluster.Master;
 import com.zyf.commands.ReplConf;
 
 import java.io.IOException;
@@ -40,11 +39,8 @@ public class Handler extends AbstractHandler {
     }
 
     @Override
-    public void reply(CommandEnum commandEnum, OutputStream outputStream, Object sendData, byte[] response) throws IOException {
+    public void reply(CommandEnum commandEnum, OutputStream outputStream, byte[] response) throws IOException {
         outputStream.write(response);
-        if (Master.getMaster() != null && sendData != null && (sendData instanceof List)) {
-            Master.getMaster().send((List<Object>) sendData);
-        }
     }
 
     public byte[] buildArraysResponse(List<Object> data) {
