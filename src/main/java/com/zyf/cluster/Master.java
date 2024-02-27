@@ -2,6 +2,7 @@ package com.zyf.cluster;
 
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.CommandType;
+import com.zyf.concurrent.GlobalBlocker;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -44,17 +45,20 @@ public class Master {
         }
         if (slaveList.size() < 1) {
             System.out.println("not slave node");
+            GlobalBlocker.pass();
             return;
         }
         byte[] b = buildArraysCommand(data);
         for (OutputStream os : slaveList) {
             try {
-//                System.out.println("write to slave command ->" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort());
                 os.write(b);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                slaveList.remove(os);
+                System.out.println("slave is dropped, removed");
             }
         }
+
+        GlobalBlocker.pass();
     }
 
     public boolean checkWrite(String command) {

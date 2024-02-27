@@ -4,8 +4,8 @@ import com.zyf.CommandFactory;
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.Constants;
 import com.zyf.Protocol;
-import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
+import com.zyf.concurrent.GlobalBlocker;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +43,7 @@ public abstract class AbstractHandler implements IHandler{
             String c = "";
             while (true) {
                 final Object data = Protocol.process(inputStream);
+                GlobalBlocker.await();
                 byte[] response = null;
                 if (data instanceof byte[]) {
                     final byte[] bytes = (byte[]) data;
