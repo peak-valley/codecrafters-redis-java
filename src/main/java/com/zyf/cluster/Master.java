@@ -29,6 +29,10 @@ public class Master {
         }
     }
 
+    public int slaveSize() {
+        return slaveList.size();
+    }
+
     public void addSlave(String ip, int port, OutputStream os) {
         System.out.println("connect slave->" + ip + ":" + port);
         slaveList.add(os);

@@ -1,5 +1,7 @@
 package com.zyf.commands;
 
+import com.zyf.Constant.Constants;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,5 +38,10 @@ public abstract class AbstractCommand implements Command {
         }
         System.out.println("build command ->" + command);
         return command.toString().getBytes();
+    }
+
+    public byte[] buildIntegerResponse(int data) {
+        String response = ":" + String.valueOf(data) + _R_N;
+        return response.getBytes();
     }
 }
