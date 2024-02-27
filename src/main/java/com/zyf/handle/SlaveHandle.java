@@ -193,6 +193,8 @@ public class SlaveHandle extends AbstractHandler {
     public void reply(CommandEnum commandEnum, OutputStream outputStream, byte[] response) throws IOException {
         if (CommandType.WRITE.equals(commandEnum.getType())) {
             System.out.println("The slave's write command cancels the reply");
+        } else if(CommandEnum.PING.equals(commandEnum)) {
+            System.out.println("The slave's ping command cancels the reply");
         } else {
             outputStream.write(response);
         }
