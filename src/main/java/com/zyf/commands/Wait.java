@@ -23,6 +23,7 @@ public class Wait extends AbstractCommand {
         byte[] bytes = buildIntegerResponse(i);
         if (!Master.getMaster().presenceSendCommands()) {
             System.out.println("not presence send commands");
+            System.out.println("slave size : " + i);
             return bytes;
         }
         String s = new String((byte[]) content.get(2));
