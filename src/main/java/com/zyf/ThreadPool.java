@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 public class ThreadPool {
 
-    final static ExecutorService executorService = Executors.newFixedThreadPool(6);
+    final static ExecutorService executorService = Executors.newFixedThreadPool(10);
     public static void execute(Runnable r) {
         executorService.submit(r);
     }
