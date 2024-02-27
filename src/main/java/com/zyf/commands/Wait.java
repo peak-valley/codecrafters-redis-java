@@ -16,6 +16,14 @@ public class Wait extends AbstractCommand {
     public byte[] execute(List<Object> content) {
         System.out.println("wait is running");
 
+        Master master = Master.getMaster();
+        if (!Master.getMaster().presenceSendCommands()) {
+            System.out.println("not presence send commands");
+            int i = master.slaveSize();
+            System.out.println("slave size : " + i);
+            return buildIntegerResponse(i);
+        }
+
         GlobalBlocker.await();
         count = new AtomicInteger(0);
         int desireCount = Integer.parseInt(new String((byte[]) content.get(1)));
@@ -23,7 +31,8 @@ public class Wait extends AbstractCommand {
 
         Instant start = Instant.now();
 
-        Master master = Master.getMaster();
+
+
         List<Object> list = new ArrayList<>();
         ThreadPool.execute(() -> {
             System.out.println("Wait -> send REPLCONF command to slave");
@@ -31,17 +40,19 @@ public class Wait extends AbstractCommand {
             master.send(buildArraysResponse(list));
         });
 
+        int currentCount = count.get();
         while (Duration.between(start, Instant.now()).toMillis() > limitTime) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
             }
 
-            if (count.get() >= desireCount) {
-                return buildIntegerResponse(count.get());
+            if (currentCount >= desireCount) {
+                return buildIntegerResponse(currentCount);
             }
         }
-        return buildIntegerResponse(count.get());
+        System.out.println("timeout, return current count:" + currentCount);
+        return buildIntegerResponse(currentCount);
     }
 
     static AtomicInteger count = new AtomicInteger(-1);
