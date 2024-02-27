@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.zyf.Constant.Constants.*;
 
@@ -17,6 +18,7 @@ import static com.zyf.Constant.Constants.*;
 public class Master {
     private volatile static Master MY = null;
     List<OutputStream> slaveList = new ArrayList<>();
+    AtomicInteger sendCommands = new AtomicInteger(0);
 
     public static boolean moasterMode = true;
 
@@ -48,6 +50,7 @@ public class Master {
             GlobalBlocker.pass();
             return;
         }
+        sendCommands.incrementAndGet();
         byte[] b = buildArraysCommand(data);
         for (OutputStream os : slaveList) {
             try {
@@ -57,7 +60,7 @@ public class Master {
                 System.out.println("slave is dropped, removed");
             }
         }
-
+        sendCommands.decrementAndGet();
         GlobalBlocker.pass();
     }
 
@@ -78,5 +81,9 @@ public class Master {
         }
         System.out.println("build command ->" + command);
         return command.toString().getBytes();
+    }
+
+    public boolean presenceSendCommands() {
+        return sendCommands.get() > 0;
     }
 }      

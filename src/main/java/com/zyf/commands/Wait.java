@@ -10,6 +10,11 @@ public class Wait extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
         System.out.println("wait is running");
+        int i = Master.getMaster().slaveSize();
+        byte[] bytes = buildIntegerResponse(i);
+        if (!Master.getMaster().presenceSendCommands()) {
+            return bytes;
+        }
         String s = new String((byte[]) content.get(2));
         long ms = Long.parseLong(s);
         GlobalBlocker.await();
@@ -18,7 +23,8 @@ public class Wait extends AbstractCommand {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        int i = Master.getMaster().slaveSize();
-        return buildIntegerResponse(i);
+        i = Master.getMaster().slaveSize();
+        bytes = buildIntegerResponse(i);
+        return bytes;
     }
 }
