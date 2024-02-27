@@ -22,6 +22,7 @@ public abstract class AbstractHandler implements IHandler{
     CommandFactory commandFactory = new CommandFactory();
     InputStream inputStream;
     OutputStream outputStream;
+    boolean isSlave = false;
 
     public AbstractHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -43,7 +44,9 @@ public abstract class AbstractHandler implements IHandler{
             String c = "";
             while (true) {
                 final Object data = Protocol.process(inputStream);
-                GlobalBlocker.await();
+                if (!isSlave) {
+                    GlobalBlocker.await();
+                }
                 byte[] response = null;
                 if (data instanceof byte[]) {
                     final byte[] bytes = (byte[]) data;

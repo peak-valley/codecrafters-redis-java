@@ -4,9 +4,12 @@ import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
 import com.zyf.concurrent.GlobalBlocker;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Wait extends AbstractCommand {
     @Override
@@ -14,6 +17,12 @@ public class Wait extends AbstractCommand {
         System.out.println("wait is running");
 
         GlobalBlocker.await();
+        count = new AtomicInteger(0);
+        int desireCount = Integer.parseInt(new String((byte[]) content.get(1)));
+        long limitTime = Long.parseLong(new String((byte[]) content.get(1)));
+
+        Instant start = Instant.now();
+
         Master master = Master.getMaster();
         List<Object> list = new ArrayList<>();
         ThreadPool.execute(() -> {
@@ -21,23 +30,25 @@ public class Wait extends AbstractCommand {
             Collections.addAll(list, "REPLCONF", "GETACK", "*");
             master.send(buildArraysResponse(list));
         });
-        int i = master.slaveSize();
-        byte[] bytes = buildIntegerResponse(i);
-        if (!Master.getMaster().presenceSendCommands()) {
-            System.out.println("not presence send commands");
-            System.out.println("slave size : " + i);
-            return bytes;
-        }
-        String s = new String((byte[]) content.get(2));
-        long ms = Long.parseLong(s);
-        try {
 
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (Duration.between(start, Instant.now()).toMillis() > limitTime) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+
+            if (count.get() >= desireCount) {
+                return buildIntegerResponse(count.get());
+            }
         }
-        i = Master.getMaster().slaveSize();
-        bytes = buildIntegerResponse(i);
-        return bytes;
+        return buildIntegerResponse(count.get());
+    }
+
+    static AtomicInteger count = new AtomicInteger(-1);
+    public static void incrementAck() {
+        if (count.get() == -1) {
+            return;
+        }
+        count.incrementAndGet();
     }
 }

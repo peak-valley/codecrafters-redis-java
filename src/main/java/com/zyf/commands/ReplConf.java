@@ -1,10 +1,8 @@
 package com.zyf.commands;
 
 import com.zyf.cluster.ClusterInformation;
-import com.zyf.handle.SlaveHandle;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,6 +19,8 @@ public class ReplConf extends AbstractCommand {
             List<Object> c = new ArrayList<>();
             boolean b = Collections.addAll(c, "REPLCONF", "ACK", getOffset());
             return buildArraysResponse(c);
+        } else if ("ACK".equals(param1)) {
+
         }
         return buildSimpleStrResponse("OK");
     }
