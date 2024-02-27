@@ -41,6 +41,22 @@ public class Master {
         slaveList.add(os);
     }
 
+    public void send(byte[] command) {
+        if (slaveList.size() < 1) {
+            System.out.println("not slave node");
+            GlobalBlocker.pass();
+            return;
+        }
+
+        for (OutputStream outputStream : slaveList) {
+            try {
+                outputStream.write(command);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public void send(List<Object> data) {
         if(!checkWrite(new String((byte[]) data.get(0)))) {
             return;
