@@ -25,6 +25,6 @@ public class Config extends AbstractCommand {
             return buildArraysResponse(list);
         }
 
-        return new byte[0];
+        return "-ERR\r\n".getBytes();
     }
 }
