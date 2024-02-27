@@ -40,6 +40,7 @@ public class Handler extends AbstractHandler {
 
     @Override
     public void reply(CommandEnum commandEnum, OutputStream outputStream, byte[] response) throws IOException {
+        System.out.println("reply -> " + commandEnum.getName());
         outputStream.write(response);
     }
 
