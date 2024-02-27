@@ -17,12 +17,6 @@ public class Wait extends AbstractCommand {
         System.out.println("wait is running");
 
         Master master = Master.getMaster();
-        if (!Master.getMaster().presenceSendCommands()) {
-            System.out.println("not presence send commands");
-            int i = master.slaveSize();
-            System.out.println("slave size : " + i);
-            return buildIntegerResponse(i);
-        }
 
         GlobalBlocker.await();
         count = new AtomicInteger(0);
@@ -39,6 +33,13 @@ public class Wait extends AbstractCommand {
             Collections.addAll(list, "REPLCONF", "GETACK", "*");
             master.send(buildArraysResponse(list));
         });
+
+        if (!Master.getMaster().presenceSendCommands()) {
+            System.out.println("not presence send commands");
+            int i = master.slaveSize();
+            System.out.println("slave size : " + i);
+            return buildIntegerResponse(i);
+        }
 
         int currentCount = count.get();
         while (Duration.between(start, Instant.now()).toMillis() > limitTime) {
