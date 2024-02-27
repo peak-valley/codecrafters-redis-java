@@ -116,7 +116,7 @@ public class TestClient {
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
                 setReadReply(outputStream, bufferedReader, "foo", "123");
-                wait(outputStream, bufferedReader);
+//                wait(outputStream, bufferedReader);
 //                set(outputStream, bufferedReader, "bar", "2123");
 //                set(outputStream, bufferedReader, "foo", "24523");
 //                get(outputStream, bufferedReader);

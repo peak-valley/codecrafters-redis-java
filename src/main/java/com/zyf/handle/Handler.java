@@ -55,7 +55,6 @@ public class Handler extends AbstractHandler {
                 command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
             }
         }
-        System.out.println("build command ->" + command);
         return command.toString().getBytes();
     }
 
