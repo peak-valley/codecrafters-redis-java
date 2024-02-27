@@ -73,9 +73,13 @@ public class Main {
                     e.printStackTrace();
                 }
             } else if ("--dir".equals(args[i])) {
-                RDBCache.put("dir", args[++i]);
+                String arg = args[++i];
+                System.out.println("put dir config" + arg);
+                RDBCache.put("dir", arg);
             } else if ("--dbfilename".equals(args[i])) {
-                RDBCache.put("dbfilename", args[++i]);
+                String arg = args[++i];
+                System.out.println("put dir config" + arg);
+                RDBCache.put("dbfilename", arg);
             }
         }
 
