@@ -4,6 +4,7 @@ import com.zyf.CommandFactory;
 import com.zyf.Constant.CommandEnum;
 import com.zyf.Constant.Constants;
 import com.zyf.Protocol;
+import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
 import com.zyf.concurrent.GlobalBlocker;
 
@@ -64,7 +65,7 @@ public abstract class AbstractHandler implements IHandler{
                     c = command;
                     response = commandFactory.execute(command, content);
                     if (Master.getMaster() != null) {
-                        Master.getMaster().send(content, command);
+                        ThreadPool.execute(() -> Master.getMaster().send(content, command));
                     }
                 } else if (data instanceof String){
                     String content = (String) data;

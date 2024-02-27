@@ -41,13 +41,14 @@ public class Master {
         slaveList.add(os);
     }
 
-    public void send(byte[] command) {
+    public void send(byte[] command, String c) {
         if (slaveList.size() < 1) {
             System.out.println("not slave node");
             GlobalBlocker.pass();
             return;
         }
 
+        System.out.printf("start send " + c);
         for (OutputStream outputStream : slaveList) {
             try {
                 outputStream.write(command);
