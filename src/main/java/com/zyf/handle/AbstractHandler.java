@@ -42,6 +42,7 @@ public abstract class AbstractHandler implements IHandler{
                 outputStream = clientSocket.getOutputStream();
             }
             String c = "";
+            Object sendData = null;
             while (true) {
                 final Object data = Protocol.process(inputStream);
                 if (!isSlave) {
@@ -59,13 +60,11 @@ public abstract class AbstractHandler implements IHandler{
                     }
                 } else if (data instanceof List) {
                     final List<Object> content = (List<Object>) data;
+                    sendData = content;
                     byte[] bytes = (byte[]) content.get(0);
                     final String command = new String(bytes).toUpperCase();
                     c = command;
                     response = commandFactory.execute(command, content);
-                    if (Master.getMaster() != null) {
-                        Master.getMaster().send(content);
-                    }
                 } else if (data instanceof String){
                     String content = (String) data;
                     String[] strings = content.split(" ");
@@ -86,7 +85,7 @@ public abstract class AbstractHandler implements IHandler{
                     continue;
                 }
 
-                reply(CommandEnum.valueOf(c), outputStream, response);
+                reply(CommandEnum.valueOf(c), outputStream, sendData, response);
 
                 if (c.equals(Constants.PSYNC)) {
                     System.out.println("send empty RDB");
