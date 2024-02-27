@@ -79,7 +79,7 @@ public abstract class AbstractHandler implements IHandler{
                 String finalC = c;
                 byte[] finalResponse = response;
 //                ThreadPool.execute(() -> afterExecuting(CommandEnum.valueOf(finalC), outputStream, data, finalResponse));
-                afterExecuting(CommandEnum.valueOf(finalC), outputStream, data, finalResponse);
+                afterExecuting(CommandEnum.getCommand(finalC), outputStream, data, finalResponse);
 
                 if (response == null) {
                     System.out.println("response is null");

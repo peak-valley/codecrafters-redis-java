@@ -104,8 +104,4 @@ public class Master {
         System.out.println("build command ->" + command);
         return command.toString().getBytes();
     }
-
-    public boolean presenceSendCommands() {
-        return sendCommands.get() > 0;
-    }
 }      

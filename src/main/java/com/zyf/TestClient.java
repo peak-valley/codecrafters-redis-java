@@ -53,9 +53,9 @@ public class TestClient {
                             i++;
                         } else if (i == 1) {
                             i++;
-                            set(outputStream, bufferedReader, "l27x2yrsav8", "dy85j0bw6sx2");
-                            set(outputStream, bufferedReader, "xhwi9x5791fsstzf", "7ekoe2");
-                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
+//                            set(outputStream, bufferedReader, "l27x2yrsav8", "dy85j0bw6sx2");
+//                            set(outputStream, bufferedReader, "xhwi9x5791fsstzf", "7ekoe2");
+//                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
 //                        } else if (i == 2) {
 //                            i++;
 //                            outputStream.write("*3\r\n$8\r\nREPLCONF\r\n$6\r\nGETACK\r\n$1\r\n*\r\n".getBytes());
@@ -115,7 +115,7 @@ public class TestClient {
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-                set(outputStream, bufferedReader, "foo", "123");
+                setReadReply(outputStream, bufferedReader, "foo", "123");
                 wait(outputStream, bufferedReader);
 //                set(outputStream, bufferedReader, "bar", "2123");
 //                set(outputStream, bufferedReader, "foo", "24523");
@@ -144,7 +144,7 @@ public class TestClient {
         }
 
     private static void wait(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*3\r\n$4\r\nwait\r\n$1\r\n0\r\n$5\r\n60000\r\n";
+        String command = "*3\r\n$4\r\nwait\r\n$1\r\n1\r\n$3\r\n500\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";
 //                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
 //                String ping = "*2\r\n$4\r\necho\r\n$3";

@@ -1,6 +1,7 @@
 package com.zyf.commands;
 
 import com.zyf.ThreadPool;
+import com.zyf.cluster.ClusterInformation;
 import com.zyf.cluster.Master;
 import com.zyf.concurrent.GlobalBlocker;
 
@@ -21,11 +22,7 @@ public class Wait extends AbstractCommand {
         GlobalBlocker.await();
         count = new AtomicInteger(0);
         int desireCount = Integer.parseInt(new String((byte[]) content.get(1)));
-        long limitTime = Long.parseLong(new String((byte[]) content.get(1)));
-
-        Instant start = Instant.now();
-
-
+        long limitTime = Long.parseLong(new String((byte[]) content.get(2)));
 
         List<Object> list = new ArrayList<>();
         ThreadPool.execute(() -> {
@@ -33,21 +30,22 @@ public class Wait extends AbstractCommand {
             Collections.addAll(list, "REPLCONF", "GETACK", "*");
             master.send(buildArraysResponse(list));
         });
-
-        if (!Master.getMaster().presenceSendCommands()) {
+        int offset = ClusterInformation.getOffset();
+        if (offset <= 0) {
             System.out.println("not presence send commands");
             int i = master.slaveSize();
             System.out.println("slave size : " + i);
             return buildIntegerResponse(i);
         }
 
-        int currentCount = count.get();
-        while (Duration.between(start, Instant.now()).toMillis() > limitTime) {
+        Instant start = Instant.now();
+        int currentCount = 0;
+        while (Duration.between(start, Instant.now()).toMillis() < limitTime) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
             }
-
+            currentCount = count.get();
             if (currentCount >= desireCount) {
                 return buildIntegerResponse(currentCount);
             }

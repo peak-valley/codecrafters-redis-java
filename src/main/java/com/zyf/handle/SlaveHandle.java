@@ -25,6 +25,7 @@ public class SlaveHandle extends AbstractHandler {
 
     public SlaveHandle(Socket clientSocket, InputStream inputStream, OutputStream outputStream) {
         super(clientSocket, inputStream, outputStream);
+        isSlave = true;
     }
 
     public void init() {

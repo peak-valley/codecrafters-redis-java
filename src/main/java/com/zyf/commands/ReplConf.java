@@ -20,7 +20,7 @@ public class ReplConf extends AbstractCommand {
             boolean b = Collections.addAll(c, "REPLCONF", "ACK", getOffset());
             return buildArraysResponse(c);
         } else if ("ACK".equals(param1)) {
-
+            Wait.incrementAck();
         }
         return buildSimpleStrResponse("OK");
     }

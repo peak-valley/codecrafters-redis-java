@@ -16,6 +16,15 @@ public enum CommandEnum {
 
     ;
 
+    public static CommandEnum getCommand(String command) {
+        for (CommandEnum value : values()) {
+            if (value.name.equals(command.toUpperCase())) {
+                return value;
+            }
+        }
+        return NULL;
+    }
+
     CommandEnum(String name, CommandType type) {
         this.name = name;
         this.type = type;
