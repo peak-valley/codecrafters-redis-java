@@ -22,8 +22,8 @@ public class TestClient {
     public static void main(String[] args) {
         executorService = Executors.newFixedThreadPool(1);
 
-        server();
-//        client();
+//        server();
+        client();
     }
 // --replicaof localhost 6379
     private static void server() {
@@ -115,13 +115,13 @@ public class TestClient {
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-//                set(outputStream, bufferedReader, "foo", "123");
+                set(outputStream, bufferedReader, "foo", "123");
+                wait(outputStream, bufferedReader);
 //                set(outputStream, bufferedReader, "bar", "2123");
 //                set(outputStream, bufferedReader, "foo", "24523");
 //                get(outputStream, bufferedReader);
 //                info(outputStream, bufferedReader);
                 new Thread(() -> print(bufferedReader)).start();
-                wait(outputStream, bufferedReader);
 //                psync(outputStream, bufferedReader);
 
             }

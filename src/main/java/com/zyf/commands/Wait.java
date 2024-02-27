@@ -13,12 +13,14 @@ public class Wait extends AbstractCommand {
         int i = Master.getMaster().slaveSize();
         byte[] bytes = buildIntegerResponse(i);
         if (!Master.getMaster().presenceSendCommands()) {
+            System.out.println("not presence send commands");
             return bytes;
         }
         String s = new String((byte[]) content.get(2));
         long ms = Long.parseLong(s);
         GlobalBlocker.await();
         try {
+
             Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();

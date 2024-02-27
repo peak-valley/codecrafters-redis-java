@@ -52,13 +52,18 @@ public class Master {
         }
         sendCommands.incrementAndGet();
         byte[] b = buildArraysCommand(data);
-        for (OutputStream os : slaveList) {
+        for (int i = 0; i < slaveList.size(); i++) {
+            System.out.println("sending " + i + " command to slave");
+            OutputStream os = slaveList.get(i);
             try {
                 os.write(b);
             } catch (IOException e) {
                 slaveList.remove(os);
                 System.out.println("slave is dropped, removed");
             }
+
+        }
+        for (OutputStream os : slaveList) {
         }
         sendCommands.decrementAndGet();
         GlobalBlocker.pass();
