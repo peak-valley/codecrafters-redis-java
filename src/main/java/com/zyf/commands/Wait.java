@@ -12,13 +12,14 @@ public class Wait extends AbstractCommand {
     public byte[] execute(List<Object> content) {
         System.out.println("wait is running");
 
+        GlobalBlocker.await();
         Master master = Master.getMaster();
         List<Object> list = new ArrayList<>();
         System.out.println("Wait -> send REPLCONF command to slave");
         Collections.addAll(list, "REPLCONF", "GETACK", "*");
         master.send(buildArraysResponse(list));
-        int i = master.slaveSize();
 
+        int i = master.slaveSize();
         byte[] bytes = buildIntegerResponse(i);
         if (!Master.getMaster().presenceSendCommands()) {
             System.out.println("not presence send commands");
@@ -26,7 +27,6 @@ public class Wait extends AbstractCommand {
         }
         String s = new String((byte[]) content.get(2));
         long ms = Long.parseLong(s);
-        GlobalBlocker.await();
         try {
 
             Thread.sleep(ms);

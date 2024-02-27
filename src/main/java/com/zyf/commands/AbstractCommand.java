@@ -41,7 +41,7 @@ public abstract class AbstractCommand implements Command {
     }
 
     public byte[] buildIntegerResponse(int data) {
-        String response = ":" + String.valueOf(data) + _R_N;
+        String response = ":" + data + _R_N;
         return response.getBytes();
     }
 }

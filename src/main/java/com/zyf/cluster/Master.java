@@ -52,7 +52,8 @@ public class Master {
             try {
                 outputStream.write(command);
             } catch (IOException e) {
-                e.printStackTrace();
+                slaveList.remove(outputStream);
+                System.out.println("slave is dropped, removed");
             }
         }
     }
