@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 public class Main {
 //    --port 6379 --replicaof localhost 6380
 //    --port 6380
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         // --port <PORT> --replicaof <MASTER_HOST> <MASTER_PORT>
         resolve(args);
         ServerSocket serverSocket = null;
@@ -25,8 +25,8 @@ public class Main {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("client conn：IP:" + clientSocket.getInetAddress() + ", port:" + clientSocket.getPort());
+                Thread.sleep(1000);
                 ThreadPool.execute(() -> {
-
                     Handler handler = new Handler(clientSocket);
                     handler.handle();
                 });
