@@ -4,6 +4,7 @@ import com.zyf.Constant.Constants;
 import com.zyf.collect.KVString;
 import com.zyf.collect.SimpleKVCache;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class Get extends AbstractCommand {
     }
 
     public static boolean isNotExpire(LocalDateTime dateTime) {
-        return LocalDateTime.now().compareTo(dateTime) <= 0;
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("GET -> now is " + Instant.now().toEpochMilli());
+        return now.compareTo(dateTime) <= 0;
     }
 }
