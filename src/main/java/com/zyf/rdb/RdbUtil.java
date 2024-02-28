@@ -22,12 +22,20 @@ public class RdbUtil {
         if (!validateRdb(result)) {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
-        System.out.println("rdb -> " + convertIntByteListToString(result));
+        System.out.println("rdb -> " + IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).collect(Collectors.joining()));
         return result;
     }
 
     public static boolean validateRdb(List<Integer> bytes) {
         return MAGIC_NUMBER.equals(convertIntByteListToString(bytes.subList(0, 5)));
+    }
+
+    public static void main(String[] args) {
+        byte[] bytes = MAGIC_NUMBER.getBytes();
+        String s = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).collect(Collectors.joining());
+        System.out.println(s);
+
+//        System.out.println(list.stream().mapTo(i -> Integer.parseInt(Integer.toHexString(list.get(i)))).to);
     }
 
     public static String convertIntByteListToString(List<Integer> bytes) {
