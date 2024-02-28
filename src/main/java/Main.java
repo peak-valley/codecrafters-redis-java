@@ -101,7 +101,7 @@ public class Main {
         try {
             RdbUtil.openRdbFile(dir, dbfilename);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println("redis failed - rdb file is notfound");
         }
     }
 }
