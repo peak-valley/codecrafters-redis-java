@@ -30,7 +30,7 @@ public class Main {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("client conn：IP:" + clientSocket.getInetAddress() + ", port:" + clientSocket.getPort());
-                Thread.sleep(500);
+                Thread.sleep(1000);
                 ThreadPool.execute(() -> {
                     Handler handler = new Handler(clientSocket);
                     handler.handle();
