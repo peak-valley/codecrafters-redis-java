@@ -4,6 +4,7 @@ import com.zyf.rdb.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RdbBuilder {
     private List<Integer> bytes;
@@ -35,7 +36,7 @@ public class RdbBuilder {
         while (bytes.get(pos) == REDIS_DB_SELECTOR) {
             pos++;
             Integer dbNumber = bytes.get(pos);
-            if (bytes.get(pos + 1) != REDIS_AUXILIARY_START_BIT) {
+            if (!Objects.equals(bytes.get(pos + 1), REDIS_RESIZEDB_START_BIT)) {
                 break;
             }
 

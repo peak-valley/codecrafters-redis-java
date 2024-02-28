@@ -1,8 +1,9 @@
 package com.zyf.rdb;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
@@ -23,9 +24,6 @@ public class RdbUtil {
         if (!validateRdb(result)) {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
-        System.out.println("rdb -> \n" + IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList());
-        System.out.println("rdb -> \n" + Arrays.toString(bytes));
-        System.out.println(result);
         return result;
     }
 
@@ -39,7 +37,7 @@ public class RdbUtil {
     public static final Integer REDIS_RDB_RESIZEDB = 0xFB;
     public static final Integer REDIS_RDB_AUX = 0xFA;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         /**
 //        String rdb = "524544495330303033fffffffa972656469732d7665725372e322e30fffffffaa72656469732d62697473ffffffc040fffffffe0fffffffb10056d616e676fa73747261776265727279ffffffff78ffffffa0fffffff6ffffffafffffff80ffffffb14a7da";
          * 6进制
@@ -50,6 +48,10 @@ public class RdbUtil {
          */
         int REDIS_FC = 0xFC;
         byte[] bytes = new byte[] {82, 69, 68, 73, 83, 48, 48, 48, 51, -6, 9, 114, 101, 100, 105, 115, 45, 118, 101, 114, 5, 55, 46, 50, 46, 48, -6, 10, 114, 101, 100, 105, 115, 45, 98, 105, 116, 115, -64, 64, -2, 0, -5, 1, 0, 0, 5, 109, 97, 110, 103, 111, 9, 114, 97, 115, 112, 98, 101, 114, 114, 121, -1, 56, 89, -71, 80, -91, 70, 23, 87, 10};
+        OutputStream os = new FileOutputStream(new File("F:\\code\\oneself\\codecrafters\\codecrafters-redis-java\\dump.rdb"));
+        os.write(bytes);
+
+
         List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
         List<Integer> list1 = IntStream.range(0, bytes.length).mapToObj(i -> Byte.toUnsignedInt(bytes[i])).toList();
         List<Integer> list2 = IntStream.range(0, bytes.length)
