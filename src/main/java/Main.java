@@ -6,11 +6,14 @@ import com.zyf.cluster.Master;
 import com.zyf.cluster.Slave;
 import com.zyf.infomation.RedisInformation;
 import com.zyf.rdb.RDBCache;
+import com.zyf.rdb.RdbBuilder;
 import com.zyf.rdb.RdbUtil;
+import com.zyf.rdb.model.Rdb;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -99,7 +102,12 @@ public class Main {
         }
 
         try {
-            RdbUtil.openRdbFile(dir, dbfilename);
+            List<Integer> data = RdbUtil.openRdbFile(dir, dbfilename);
+            Rdb rdb = new RdbBuilder().bytes(data).build();
+            System.out.println("rdb: " + rdb);
+            if (rdb != null) {
+                rdb.init();
+            }
         } catch (IOException e) {
             System.out.println("redis failed - rdb file is notfound");
         }
