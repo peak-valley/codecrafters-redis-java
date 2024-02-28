@@ -39,10 +39,10 @@ public class RdbUtil {
          * [your_program] [52, 45, 44, 49, 53, 30, 30, 30, 33, fffffffa, 9, 72, 65, 64, 69, 73, 2d, 76, 65, 72, 5, 37, 2e, 32, 2e, 30, fffffffa, a, 72, 65, 64, 69, 73, 2d, 62, 69, 74, 73, ffffffc0, 40, fffffffe, 0, fffffffb, 1, 0, 0, 4, 70, 65, 61, 72, 5, 61, 70, 70, 6c, 65, ffffffff, 62, d, 3b, 35, ffffffb3, 41, ffffffe4, ffffffb0, a]
          * [your_program] [82, 69, 68, 73, 83, 48, 48, 48, 51, 250, 9, 114, 101, 100, 105, 115, 45, 118, 101, 114, 5, 55, 46, 50, 46, 48, 250, 10, 114, 101, 100, 105, 115, 45, 98, 105, 116, 115, 192, 64, 254, 0, 251, 1, 0, 0, 4, 112, 101, 97, 114, 5, 97, 112, 112, 108, 101, 255, 98, 13, 59, 53, 179, 65, 228, 176, 10]
          */
-        byte[] bytes = new byte[] {82, 69, 68, 73, 83, 48, 48, 48, 51, 250, 9, 114, 101, 100, 105, 115, 45, 118, 101, 114, 5, 55, 46, 50, 46, 48, 250, 10, 114, 101, 100, 105, 115, 45, 98, 105, 116, 115, 192, 64, 254, 0, 251, 1, 0, 0, 4, 112, 101, 97, 114, 5, 97, 112, 112, 108, 101, 255, 98, 13, 59, 53, 179, 65, 228, 176, 10};
+//        byte[] bytes = new byte[] {82, 69, 68, 73, 83, 48, 48, 48, 51, 250, 9, 114, 101, 100, 105, 115, 45, 118, 101, 114, 5, 55, 46, 50, 46, 48, 250, 10, 114, 101, 100, 105, 115, 45, 98, 105, 116, 115, 192, 64, 254, 0, 251, 1, 0, 0, 4, 112, 101, 97, 114, 5, 97, 112, 112, 108, 101, 255, 98, 13, 59, 53, 179, 65, 228, 176, 10};
 //        String s = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
-        List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
-        System.out.println(list);
+//        List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
+//        System.out.println(list);
 //        System.out.println(s);
 
 //        System.out.println(list.stream().mapTo(i -> Integer.parseInt(Integer.toHexString(list.get(i)))).to);
