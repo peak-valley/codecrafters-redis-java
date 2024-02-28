@@ -22,7 +22,7 @@ public class RdbUtil {
         if (!validateRdb(result)) {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
-        System.out.println("rdb -> " + IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).collect(Collectors.joining()));
+        System.out.println("rdb -> \n" + IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList());
         return result;
     }
 
@@ -31,9 +31,12 @@ public class RdbUtil {
     }
 
     public static void main(String[] args) {
+        String rdb = "524544495330303033fffffffa972656469732d7665725372e322e30fffffffaa72656469732d62697473ffffffc040fffffffe0fffffffb10056d616e676fa73747261776265727279ffffffff78ffffffa0fffffff6ffffffafffffff80ffffffb14a7da";
         byte[] bytes = MAGIC_NUMBER.getBytes();
-        String s = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).collect(Collectors.joining());
-        System.out.println(s);
+//        String s = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
+        List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
+        System.out.println(list);
+//        System.out.println(s);
 
 //        System.out.println(list.stream().mapTo(i -> Integer.parseInt(Integer.toHexString(list.get(i)))).to);
     }
