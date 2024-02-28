@@ -49,7 +49,7 @@ public class RdbUtil {
         int REDIS_FC = 0xFC;
         byte[] bytes = new byte[] {82, 69, 68, 73, 83, 48, 48, 48, 51, -6, 9, 114, 101, 100, 105, 115, 45, 118, 101, 114, 5, 55, 46, 50, 46, 48, -6, 10, 114, 101, 100, 105, 115, 45, 98, 105, 116, 115, -64, 64, -2, 0, -5, 1, 0, 0, 5, 109, 97, 110, 103, 111, 9, 114, 97, 115, 112, 98, 101, 114, 114, 121, -1, 56, 89, -71, 80, -91, 70, 23, 87, 10};
         OutputStream os = new FileOutputStream(new File("F:\\code\\oneself\\codecrafters\\codecrafters-redis-java\\dump.rdb"));
-        os.write(bytes);
+//        os.write(bytes);
 
 
         List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
