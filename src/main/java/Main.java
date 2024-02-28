@@ -105,7 +105,7 @@ public class Main {
             List<Integer> data = RdbUtil.openRdbFile(dir, dbfilename);
             Rdb rdb = new RdbBuilder().bytes(data).build();
             System.out.println("rdb: " + rdb);
-            if (rdb != null) {
+            if (rdb == null) {
                 rdb.init();
             }
         } catch (IOException e) {

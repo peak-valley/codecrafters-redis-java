@@ -24,6 +24,7 @@ public class RdbUtil {
         if (!validateRdb(result)) {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
+        System.out.println("rdb -> \n" + Arrays.toString(bytes));
         return result;
     }
 
@@ -45,7 +46,6 @@ public class RdbUtil {
 
 
         List<String> list = IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList();
-        List<Integer> list1 = IntStream.range(0, bytes.length).mapToObj(i -> Byte.toUnsignedInt(bytes[i])).toList();
         List<Integer> list2 = IntStream.range(0, bytes.length)
                 .mapToObj(i -> Byte.toUnsignedInt(bytes[i]))
                 .toList();
