@@ -4,6 +4,8 @@ import com.zyf.Constant.Constants;
 import com.zyf.collect.KVString;
 import com.zyf.collect.SimpleKVCache;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Get extends AbstractCommand {
             System.out.println("value is null, return " + Constants.NULL_BULK_STRING);
             return Constants.NULL_BULK_STRING_BYTES;
         }
-        if (kvString.getExpire() != null && !isNotExpire(kvString.getExpire())) {
+        if (kvString.getExpire() > 0 && !isNotExpire(kvString.getExpire())) {
             System.out.println("get command exec failed,key:" + key + " is expired");
             SimpleKVCache.remove(kvString.getK());
             return Constants.NULL_BULK_STRING_BYTES;
@@ -27,7 +29,7 @@ public class Get extends AbstractCommand {
         }
     }
 
-    public static boolean isNotExpire(LocalDateTime dateTime) {
-        return LocalDateTime.now().compareTo(dateTime) <= 0;
+    public static boolean isNotExpire(long expire) {
+        return Instant.ofEpochMilli(expire).isBefore(Instant.now());
     }
 }
