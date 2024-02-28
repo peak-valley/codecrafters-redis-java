@@ -23,6 +23,7 @@ public class RdbUtil {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
         System.out.println("rdb -> \n" + IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i])).toList());
+        System.out.println(result);
         return result;
     }
 
