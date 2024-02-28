@@ -4,6 +4,7 @@ import com.zyf.cluster.ClusterInformation;
 import com.zyf.collect.KVString;
 import com.zyf.collect.SimpleKVCache;
 
+import java.time.Instant;
 import java.util.List;
 
 public class Set extends AbstractCommand {
@@ -21,7 +22,7 @@ public class Set extends AbstractCommand {
             String millSeconds = new String((byte[])content.get(4));
 
             System.out.println("set command param:" + key + " " + value + " px:" + millSeconds);
-            kvString = new KVString(key, value, Long.parseLong(millSeconds));
+            kvString = new KVString(key, value, Instant.now().toEpochMilli() + Long.parseLong(millSeconds));
         } else {
             System.out.println("set command param:" + key + " " + value);
             kvString = new KVString(key, value);

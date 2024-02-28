@@ -15,7 +15,7 @@ public class KVString {
     public KVString(String k, String v, long milliseconds) {
         this.k = k;
         this.v = v;
-        this.expire = Instant.now().toEpochMilli() + milliseconds;
+        this.expire = milliseconds;
     }
 
     public String getK() {
