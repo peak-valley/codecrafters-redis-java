@@ -83,14 +83,14 @@ public class Main {
                 RDBCache.put("dbfilename", arg);
             }
         }
-        if ()
         if (!isSlave) {
             Master.init();
         }
+        loadRdb();
 
     }
 
-    public void loadRdb() {
+    public static void loadRdb() {
         String dir = RDBCache.get("dir");
         String dbfilename = RDBCache.get("dbfilename");
         if (dir == null || dbfilename == null) {
