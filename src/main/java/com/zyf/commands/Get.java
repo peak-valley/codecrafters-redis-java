@@ -34,6 +34,13 @@ public class Get extends AbstractCommand {
     public static boolean isNotExpire(long expire) {
         Instant now = Instant.now();
         System.out.println("GET -> now is " + now.toEpochMilli());
+        System.out.println("GET -> target is " + expire);
         return Instant.ofEpochMilli(expire).isAfter(now);
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Instant after = Instant.now();
+        Thread.sleep(1);
+        System.out.println(after.isBefore(Instant.now()));
     }
 }

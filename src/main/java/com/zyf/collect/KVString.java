@@ -1,5 +1,7 @@
 package com.zyf.collect;
 
+import java.time.Instant;
+
 public class KVString {
     String k;
     String v;
@@ -13,7 +15,7 @@ public class KVString {
     public KVString(String k, String v, long milliseconds) {
         this.k = k;
         this.v = v;
-        this.expire = milliseconds;
+        this.expire = Instant.now().toEpochMilli() + milliseconds;
     }
 
     public String getK() {
