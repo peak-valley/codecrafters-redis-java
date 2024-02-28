@@ -6,6 +6,7 @@ import com.zyf.cluster.Master;
 import com.zyf.cluster.Slave;
 import com.zyf.infomation.RedisInformation;
 import com.zyf.rdb.RDBCache;
+import com.zyf.rdb.RdbUtil;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -82,10 +83,25 @@ public class Main {
                 RDBCache.put("dbfilename", arg);
             }
         }
-
+        if ()
         if (!isSlave) {
             Master.init();
         }
 
+    }
+
+    public void loadRdb() {
+        String dir = RDBCache.get("dir");
+        String dbfilename = RDBCache.get("dbfilename");
+        if (dir == null || dbfilename == null) {
+            System.out.println("not found rdb properties");
+            return;
+        }
+
+        try {
+            RdbUtil.openRdbFile(dir, dbfilename);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -5,6 +5,7 @@ import static com.zyf.Constant.CommandType.*;
 public enum CommandEnum {
     GET("GET", READ),
     SET("SET", WRITE),
+    KEYS("KEYS", READ),
     ECHO("ECHO", READ),
     INFO("INFO", READ),
     REPLCONF("REPLCONF", OTHER),

@@ -15,6 +15,7 @@ public class CommandFactory {
         commandCache.put(CommandEnum.GET.getName(), new Get());
         commandCache.put(CommandEnum.SET.getName(), new Set());
         commandCache.put(CommandEnum.ECHO.getName(), new Echo());
+        commandCache.put(CommandEnum.KEYS.getName(), new Keys());
         commandCache.put(CommandEnum.PING.getName(), new Ping());
         commandCache.put(CommandEnum.INFO.getName(), new Info());
         commandCache.put(CommandEnum.REPLCONF.getName(), new ReplConf());

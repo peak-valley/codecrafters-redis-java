@@ -25,11 +25,9 @@ public class Wait extends AbstractCommand {
         long limitTime = Long.parseLong(new String((byte[]) content.get(2)));
 
         List<Object> list = new ArrayList<>();
-//        ThreadPool.execute(() -> {
         System.out.println("Wait -> send REPLCONF command to slave");
         Collections.addAll(list, "REPLCONF", "GETACK", "*");
         master.send(buildArraysResponse(list), "WAIT");
-//        });
         int offset = ClusterInformation.getOffset();
         if (offset <= 0) {
             System.out.println("not presence send commands");
