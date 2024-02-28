@@ -68,10 +68,12 @@ public class RdbBuilder {
                     var keyValuePairAndOffset = getRdbKeyValuePairAndOffset(pos + count);
                     pos = keyValuePairAndOffset.offset;
                     expireHashTablePair.add(new RdbExpirePair(expireTime, keyValuePairAndOffset.rdbPair.key(), keyValuePairAndOffset.rdbPair.value()));
+                    System.out.println("add expire data-> " + keyValuePairAndOffset.rdbPair().key() + ":" + keyValuePairAndOffset.rdbPair().value());
                 } else {
                     var keyValuePairAndOffset = getRdbKeyValuePairAndOffset(pos);
 
                     hashTablePair.add(keyValuePairAndOffset.rdbPair);
+                    System.out.println("add data-> " + keyValuePairAndOffset.rdbPair().key() + ":" + keyValuePairAndOffset.rdbPair().value());
                     pos = keyValuePairAndOffset.offset;
                 }
             }
