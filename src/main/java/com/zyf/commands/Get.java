@@ -29,8 +29,8 @@ public class Get extends AbstractCommand {
     }
 
     public static boolean isNotExpire(LocalDateTime dateTime) {
-        LocalDateTime now = LocalDateTime.now();
         System.out.println("GET -> now is " + Instant.now().toEpochMilli());
-        return now.compareTo(dateTime) <= 0;
+        LocalDateTime now = LocalDateTime.now();
+        return now.isBefore(dateTime);
     }
 }
