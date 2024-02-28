@@ -1,12 +1,9 @@
 package com.zyf.collect;
 
-import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
-
 public class KVString {
     String k;
     String v;
-    LocalDateTime expire;
+    Long expire;
 
     public KVString(String k, String v) {
         this.k = k;
@@ -16,8 +13,7 @@ public class KVString {
     public KVString(String k, String v, long milliseconds) {
         this.k = k;
         this.v = v;
-        final long l = TimeUnit.MILLISECONDS.toSeconds(milliseconds);
-        this.expire = LocalDateTime.now().plusNanos(TimeUnit.MILLISECONDS.toNanos(milliseconds));
+        this.expire = milliseconds;
     }
 
     public String getK() {
@@ -36,11 +32,11 @@ public class KVString {
         this.v = v;
     }
 
-    public LocalDateTime getExpire() {
+    public Long getExpire() {
         return expire;
     }
 
-    public void setExpire(LocalDateTime expire) {
+    public void setExpire(long expire) {
         this.expire = expire;
     }
 }
