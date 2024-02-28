@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,7 +22,7 @@ public class RdbUtil {
         if (!validateRdb(result)) {
             throw new IllegalArgumentException("redis failed - invalid rdb file");
         }
-        System.out.println("rdb -> " + result);
+        System.out.println("rdb -> " + convertIntByteListToString(result));
         return result;
     }
 
