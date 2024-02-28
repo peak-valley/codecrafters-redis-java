@@ -19,8 +19,8 @@ public class Config extends AbstractCommand {
         if ("GET".equalsIgnoreCase(param1)) {
             String v = RDBCache.get(param2);
             List<Object> list = new ArrayList<>();
-            System.out.println("CONFIG value is" + v);
-            Collections.addAll(list, param1, v);
+            System.out.println("CONFIG value is " + v);
+            Collections.addAll(list, param2, v);
             return buildArraysResponse(list);
         }
         System.out.println("CONFIG -> not config");
