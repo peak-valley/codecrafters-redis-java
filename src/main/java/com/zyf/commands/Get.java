@@ -4,8 +4,11 @@ import com.zyf.Constant.Constants;
 import com.zyf.collect.KVString;
 import com.zyf.collect.SimpleKVCache;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.List;
 
 public class Get extends AbstractCommand {
@@ -28,9 +31,16 @@ public class Get extends AbstractCommand {
         }
     }
 
-    public static boolean isNotExpire(LocalDateTime dateTime) {
-        System.out.println("GET -> now is " + Instant.now().toEpochMilli());
-        LocalDateTime now = LocalDateTime.now();
-        return now.isBefore(dateTime);
+    public static boolean isNotExpire(long expire) {
+        Instant now = Instant.now();
+        System.out.println("GET -> now is " + now.toEpochMilli());
+        System.out.println("GET -> target is " + expire);
+        return Instant.ofEpochMilli(expire).isAfter(now);
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Instant after = Instant.now();
+        Thread.sleep(1);
+        System.out.println(after.isBefore(Instant.now()));
     }
 }
