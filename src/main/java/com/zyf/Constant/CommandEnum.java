@@ -14,6 +14,7 @@ public enum CommandEnum {
     FULLRESYNC("FULLRESYNC", OTHER),
     WAIT("WAIT", OTHER),
     CONFIG("CONFIG", OTHER),
+    TYPE("TYPE", OTHER),
     NULL("NULL", OTHER)
 
     ;

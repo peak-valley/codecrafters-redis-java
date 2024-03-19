@@ -23,6 +23,7 @@ public class CommandFactory {
         commandCache.put(CommandEnum.FULLRESYNC.getName(), new FullResync());
         commandCache.put(CommandEnum.WAIT.getName(), new Wait());
         commandCache.put(CommandEnum.CONFIG.getName(), new Config());
+        commandCache.put(CommandEnum.TYPE.getName(), new Type());
     }
 
     public byte[] execute(String command, List<Object> content) {
