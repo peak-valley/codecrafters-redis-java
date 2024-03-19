@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
-public abstract class AbstractHandler implements IHandler{
+public abstract class AbstractHandler implements IHandler {
 
     private final Socket clientSocket;
     CommandFactory commandFactory = new CommandFactory();

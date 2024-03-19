@@ -26,15 +26,16 @@ public class Main {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(RedisInformation.getPort());
-            serverSocket.setReuseAddress(true);
+//            serverSocket.setReuseAddress(true);
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("client conn：IP:" + clientSocket.getInetAddress() + ", port:" + clientSocket.getPort());
-                Thread.sleep(1000);
-                ThreadPool.execute(() -> {
+                new Thread(() -> {
                     Handler handler = new Handler(clientSocket);
                     handler.handle();
-                });
+                }).start();
+//                ThreadPool.execute(() -> {
+//                });
             }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
