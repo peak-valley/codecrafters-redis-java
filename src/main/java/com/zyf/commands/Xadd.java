@@ -10,6 +10,7 @@ public class Xadd extends AbstractCommand {
         String key = new String((byte[]) content.get(1));
         String streamId = new String((byte[]) content.get(2));
 
+
         RedisRepository.putStream(key, List.of(streamId));
         return buildBulkResponse(streamId);
     }
