@@ -11,6 +11,7 @@ import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -111,7 +112,8 @@ public class TestClient {
                 outputStream = client.getOutputStream();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             for (int i = 0; i < 1; i++) {
-                xadd(outputStream, bufferedReader);
+                concurrentXadd(outputStream, bufferedReader);
+//                xadd(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
@@ -132,20 +134,52 @@ public class TestClient {
             e.printStackTrace();
         }
     }
-        public static void print(BufferedReader br) {
-            String s;
-            while (true) {
-                try {
-                    if ((s = br.readLine()) == null) break;
-                    System.out.println(s);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+    public static void print(BufferedReader br) {
+        String s;
+        while (true) {
+            try {
+                if ((s = br.readLine()) == null) break;
+                System.out.println(s);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
+    }
+
+    private static void concurrentXadd(OutputStream outputStream, BufferedReader bufferedReader) {
+        CountDownLatch latch = new CountDownLatch(1);
+        Thread thread1 = new Thread(() -> {
+            try {
+                xadd(outputStream, bufferedReader);
+                latch.await();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        Thread thread2 = new Thread(() -> {
+            try {
+                xadd(outputStream, bufferedReader);
+                latch.await();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        thread1.start();
+        thread2.start();
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        latch.countDown();
+    }
 
     private static void xadd(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystrea3\r\n$3\r\n0-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
+        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystrea3\r\n$1\r\n*\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n1-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n0-0\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";
