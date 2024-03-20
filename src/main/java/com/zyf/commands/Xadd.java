@@ -17,7 +17,7 @@ public class Xadd extends AbstractCommand {
         String streamId = new String((byte[]) content.get(2));
 
         if ("*".equals(streamId)) {
-            streamId = System.currentTimeMillis() + "-" + 1;
+            streamId = System.currentTimeMillis() + "-" + 0;
         }
 
         if (chickIsMiniId(streamId)) {
