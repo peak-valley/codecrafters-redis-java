@@ -24,7 +24,7 @@ public class CommandFactory {
         commandCache.put(CommandEnum.WAIT.getName(), new Wait());
         commandCache.put(CommandEnum.CONFIG.getName(), new Config());
         commandCache.put(CommandEnum.TYPE.getName(), new Type());
-        commandCache.put(CommandEnum.TYPE.getName(), new Xadd());
+        commandCache.put(CommandEnum.XADD.getName(), new Xadd());
     }
 
     public byte[] execute(String command, List<Object> content) {
