@@ -111,11 +111,12 @@ public class TestClient {
                 outputStream = client.getOutputStream();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
             for (int i = 0; i < 1; i++) {
+                xadd(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
 //                setExpire(outputStream, bufferedReader);
-                setReadReply(outputStream, bufferedReader, "foo", "123");
+//                setReadReply(outputStream, bufferedReader, "foo", "123");
 //                wait(outputStream, bufferedReader);
 //                set(outputStream, bufferedReader, "bar", "2123");
 //                set(outputStream, bufferedReader, "foo", "24523");
@@ -142,6 +143,21 @@ public class TestClient {
                 }
             }
         }
+
+    private static void xadd(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n1-1\r\n$1\r\n1\r\n$1\r\n1\r\n";
+//        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n0-0\r\n$1\r\n1\r\n$1\r\n1\r\n";
+//                String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+//        char[] c;
+//        int len = bufferedReader.read();
+//        c = new char[len];
+//        bufferedReader.read(c);
+//        final String s = new String(c);
+//        System.out.println(s);
+    }
 
     private static void wait(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         String command = "*3\r\n$4\r\nwait\r\n$1\r\n1\r\n$3\r\n500\r\n";

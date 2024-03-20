@@ -23,6 +23,9 @@ public abstract class AbstractCommand implements Command {
     public byte[] buildSimpleStrResponse(String content) {
         return ("+" + content + "\r\n").getBytes();
     }
+    public byte[] buildSimpleErrResponse(String content) {
+        return ("-" + content + "\r\n").getBytes();
+    }
 
     public byte[] buildArraysResponse(List<Object> data) {
 
