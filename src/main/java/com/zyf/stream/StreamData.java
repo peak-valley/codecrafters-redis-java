@@ -53,6 +53,29 @@ public class StreamData implements Comparable<StreamData> {
             return this;
         }
 
+        public StreamDataBuilder stream(String id, long maxTimeMillSeconds, long maxSequenceNumber) {
+            String[] split = id.split("-");
+            this.timeMillSeconds = Long.parseLong(split[0]);
+
+            String sequenceString = split[1];
+            /**
+             * The default sequence number is 0.
+             * The only exception is when the time part is also 0.
+             */
+            if ("*".equals(sequenceString)) {
+                if (timeMillSeconds > maxTimeMillSeconds && timeMillSeconds == 0L) {
+                    this.sequenceNumber = 1;
+                } else if (timeMillSeconds > maxTimeMillSeconds) {
+                    this.sequenceNumber = 0;
+                } else {
+                    this.sequenceNumber = ++maxSequenceNumber;
+                }
+            } else {
+                this.sequenceNumber = Long.parseLong(sequenceString);
+            }
+            return this;
+        }
+
         public StreamDataBuilder entryFields(Map<String, String> entryFields) {
             this.entryFields = entryFields;
             return this;

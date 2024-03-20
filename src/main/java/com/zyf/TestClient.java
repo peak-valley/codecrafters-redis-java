@@ -145,7 +145,7 @@ public class TestClient {
         }
 
     private static void xadd(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystrea1\r\n$3\r\n2-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
+        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystrea3\r\n$3\r\n0-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n1-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n0-0\r\n$1\r\n1\r\n$1\r\n1\r\n";
 //                String command = "*1\r\n$4\r\nping\r\n";

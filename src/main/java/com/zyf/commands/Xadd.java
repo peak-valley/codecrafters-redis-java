@@ -28,10 +28,10 @@ public class Xadd extends AbstractCommand {
             streamTreeSet = new TreeSet<>(StreamData::compareTo);
         }
         if (streamTreeSet.isEmpty()) {
-            data = StreamData.builder().stream(streamId, 0).build();
+            data = StreamData.builder().stream(streamId, -1, 0).build();
         } else {
             lastStreamData = streamTreeSet.getLast();
-            data = StreamData.builder().stream(streamId, lastStreamData.getSequenceNumber()).build();
+            data = StreamData.builder().stream(streamId,lastStreamData.getTimeMillSeconds(), lastStreamData.getSequenceNumber()).build();
         }
         if (checkIsErrorId(data, lastStreamData)) {
             return buildSimpleErrResponse(ERROR_MESSAGE_EQUAL_OR_SMALLER_TOP_ID);
