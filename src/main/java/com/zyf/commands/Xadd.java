@@ -22,9 +22,18 @@ public class Xadd extends AbstractCommand {
         }
 
         TreeSet<StreamData> streamTreeSet = RedisRepository.getStream(key);
+        StreamData data;
+        StreamData lastStreamData = null;
         if (streamTreeSet == null) {
             streamTreeSet = new TreeSet<>(StreamData::compareTo);
-        } else if (checkIsErrorId(streamId, streamTreeSet.getLast())) {
+        }
+        if (streamTreeSet.isEmpty()) {
+            data = StreamData.builder().stream(streamId, -1).build();
+        } else {
+            lastStreamData = streamTreeSet.getLast();
+            data = StreamData.builder().stream(streamId, lastStreamData.getSequenceNumber()).build();
+        }
+        if (checkIsErrorId(data, lastStreamData)) {
             return buildSimpleErrResponse(ERROR_MESSAGE_EQUAL_OR_SMALLER_TOP_ID);
         }
 
@@ -33,24 +42,23 @@ public class Xadd extends AbstractCommand {
             entryFields.put(new String((byte[]) content.get(i)), new String((byte[]) content.get(i + 1)));
         }
 
-        StreamData data = StreamData.builder().stream(streamId).entryFields(entryFields).build();
+        data.setEntryFields(entryFields);
         streamTreeSet.add(data);
 
         RedisRepository.putStream(key, streamTreeSet);
-        return buildBulkResponse(streamId);
+        return buildBulkResponse(data.getStreamId());
     }
     private boolean chickIsMiniId(String streamId) {
-        StreamData o = StreamData.builder().stream(streamId).build();
-        if (o.getTimeMillSeconds() == 0 && o.getSequenceNumber() == 0) {
+        String[] split = streamId.split("-");
+        if ("0".equals(split[0]) && "0".equals(split[1])) {
             return true;
         }
         return false;
     }
-    private boolean checkIsErrorId(String streamId, StreamData lastStreamData) {
+    private boolean checkIsErrorId(StreamData add, StreamData lastStreamData) {
         if (lastStreamData == null) {
             return false;
         }
-        StreamData add = StreamData.builder().stream(streamId).build();
         return add.compareTo(lastStreamData) <= 0;
     }
 }

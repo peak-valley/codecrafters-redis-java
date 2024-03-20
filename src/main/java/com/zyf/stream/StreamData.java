@@ -41,6 +41,18 @@ public class StreamData implements Comparable<StreamData> {
             return this;
         }
 
+        public StreamDataBuilder stream(String id, long maxSequenceNumber) {
+            String[] split = id.split("-");
+            this.timeMillSeconds = Long.parseLong(split[0]);
+            String sequenceString = split[1];
+            if ("*".equals(sequenceString)) {
+                this.sequenceNumber = ++maxSequenceNumber;
+            } else {
+                this.sequenceNumber = Long.parseLong(sequenceString);
+            }
+            return this;
+        }
+
         public StreamDataBuilder entryFields(Map<String, String> entryFields) {
             this.entryFields = entryFields;
             return this;
@@ -60,4 +72,7 @@ public class StreamData implements Comparable<StreamData> {
         return new StreamDataBuilder();
     }
 
+    public String getStreamId() {
+        return getTimeMillSeconds() + "-" + getSequenceNumber();
+    }
 }
