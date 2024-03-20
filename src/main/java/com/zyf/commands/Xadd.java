@@ -28,7 +28,7 @@ public class Xadd extends AbstractCommand {
             streamTreeSet = new TreeSet<>(StreamData::compareTo);
         }
         if (streamTreeSet.isEmpty()) {
-            data = StreamData.builder().stream(streamId, -1).build();
+            data = StreamData.builder().stream(streamId, 0).build();
         } else {
             lastStreamData = streamTreeSet.getLast();
             data = StreamData.builder().stream(streamId, lastStreamData.getSequenceNumber()).build();
