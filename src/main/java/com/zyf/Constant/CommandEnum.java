@@ -10,6 +10,7 @@ public enum CommandEnum {
     ECHO("ECHO", READ),
     INFO("INFO", READ),
     XRANGE("XRANGE", READ),
+    XREAD("XREAD", READ),
     REPLCONF("REPLCONF", OTHER),
     PSYNC("PSYNC", OTHER),
     PING("PING", READ),

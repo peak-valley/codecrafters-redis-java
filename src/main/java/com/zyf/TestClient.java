@@ -114,7 +114,8 @@ public class TestClient {
             for (int i = 0; i < 1; i++) {
 //                concurrentXadd(outputStream, bufferedReader);
                 xadd(outputStream, bufferedReader);
-                xrange(outputStream, bufferedReader);
+                xread(outputStream, bufferedReader);
+//                xrange(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
 //                echo(outputStream, bufferedReader);
@@ -145,6 +146,22 @@ public class TestClient {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private static void xread(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*4\r\n$5\r\nxread\r\n$7\r\nstreams\r\n$8\r\nmystream\r\n$1\r\n0\r\n";
+//        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n1-*\r\n$1\r\n1\r\n$1\r\n1\r\n";
+//        String command = "*5\r\n$4\r\nxadd\r\n$8\r\nmystream\r\n$3\r\n0-0\r\n$1\r\n1\r\n$1\r\n1\r\n";
+//                String command = "*1\r\n$4\r\nping\r\n";
+//                String command = "*2\r\n$4\r\necho\r\n$3\r\nhey\r\n";
+//                String ping = "*2\r\n$4\r\necho\r\n$3";
+        outputStream.write(command.getBytes());
+//        char[] c;
+//        int len = bufferedReader.read();
+//        c = new char[len];
+//        bufferedReader.read(c);
+//        final String s = new String(c);
+//        System.out.println(s);
     }
 
     private static void xrange(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
