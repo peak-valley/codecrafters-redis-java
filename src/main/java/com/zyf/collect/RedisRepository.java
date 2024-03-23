@@ -6,9 +6,11 @@ import java.util.*;
 
 public class RedisRepository {
     private static final Map<String, TreeSet<StreamData>> streamMap = new HashMap<>();
+    private static final TreeSet<StreamData> streamId = new TreeSet<>(StreamData::compareTo);
 
     public static void putStream(String k, TreeSet<StreamData> v) {
         streamMap.put(k, v);
+        streamId.addAll(v);
     }
 
     public static TreeSet<StreamData> getStream(String k) {
@@ -17,5 +19,9 @@ public class RedisRepository {
 
     public static boolean existStream(String k) {
         return streamMap.containsKey(k);
+    }
+
+    public static StreamData firstStream() {
+        return streamId.first();
     }
 }

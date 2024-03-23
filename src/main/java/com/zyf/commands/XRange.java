@@ -1,6 +1,5 @@
 package com.zyf.commands;
 
-import com.sun.source.tree.Tree;
 import com.zyf.collect.RedisRepository;
 import com.zyf.stream.StreamData;
 
@@ -14,11 +13,21 @@ public class XRange extends AbstractCommand {
         String key = convertByteToString(content.get(1));
         String start = convertByteToString(content.get(2));
         String end = convertByteToString(content.get(3));
+
+
         long startTimeMillSeconds;
         long endTimeMillSeconds;
         long startSequenceNumber = 0L;
         long endSequenceNumber = Long.MAX_VALUE;
-        if (start.contains("-")) {
+
+        if (start.equals("-")) {
+            StreamData streamData = RedisRepository.firstStream();
+            if (streamData == null) {
+                return buildArraysResponse(Collections.emptyList());
+            }
+            startTimeMillSeconds = streamData.getTimeMillSeconds();
+            startSequenceNumber = streamData.getSequenceNumber();
+        }else if (start.contains("-")) {
             String[] split = start.split("-");
             startTimeMillSeconds = Long.parseLong(split[0]);
             startSequenceNumber = Long.parseLong(split[1]);
@@ -45,7 +54,7 @@ public class XRange extends AbstractCommand {
     }
 
     /*
-    看，这里有三层数组，第一层为 stream id 的个数，第二层数组是固定的为两个（stream id + entry），第三层数组为entry的个数乘以2，entry为kv结构，所以需要乘以2
+    看，这里有三层数组，第一层为 stream id 的个数，第二层数组是固定的为两个（stream id + entry list），第三层数组为entry的个数乘以2，entry为kv结构，所以需要乘以2
 1) 1) "1711157304746-0"
    2) 1) "name"
       2) "Virginia"
