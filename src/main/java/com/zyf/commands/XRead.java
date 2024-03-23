@@ -2,12 +2,10 @@ package com.zyf.commands;
 
 import com.zyf.collect.RedisRepository;
 import com.zyf.stream.StreamData;
-import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.Set;
 
 import static com.zyf.Constant.Constants._R_N;
 
@@ -17,33 +15,34 @@ public class XRead extends AbstractCommand {
         long blockMillSenconds = 0;
         int keySize;
         int i = 0;
+        List<String> paramKeys = new ArrayList<>();
         if ("block".equalsIgnoreCase(convertByteToString(content.get(1)))) {
             blockMillSenconds = Long.parseLong(convertByteToString(content.get(2)));
             keySize = (content.size() - 4) / 2;
         } else {
             keySize = (content.size() - 2) / 2;
         }
-        Map<String, String> data = readData(content, i, keySize, blockMillSenconds > 0);
+        Map<String, String> data = readData(content, i, keySize, paramKeys, blockMillSenconds > 0);
 
         boolean isNull = checkIsNull(data);
         if (!isNull) {
-            return buildXReadRet(data);
+            return buildXReadRet(data, paramKeys);
         } else if (blockMillSenconds == 0) {
             return buildSimpleErrResponse("1");
         }
         Instant start = Instant.now();
         while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
             try {Thread.sleep(50);} catch (InterruptedException ignored) {}
-            data = readData(content, 0, keySize, blockMillSenconds > 0);
+            data = readData(content, 0, keySize, paramKeys, blockMillSenconds > 0);
             if (!checkIsNull(data)) {
-                return buildXReadRet(data);
+                return buildXReadRet(data, paramKeys);
             }
         }
         System.out.println("time out XRead,data is null");
         return buildSimpleErrResponse("1");
     }
 
-    private Map<String, String> readData(List<Object> content, int i, int keySize, boolean block) {
+    private Map<String, String> readData(List<Object> content, int i, int keySize, List<String> paramKeys, boolean block) {
         Map<String, String> ret = new HashMap<>();
         for (; i < keySize; i++) {
             String key;
@@ -61,15 +60,15 @@ public class XRead extends AbstractCommand {
             } else {
                 start = streamId;
             }
+            paramKeys.add(key);
             ret.put(key, select(start, end, key));
         }
         return ret;
     }
 
-    private byte[] buildXReadRet(Map<String, String> data) {
+    private byte[] buildXReadRet(Map<String, String> data, List<String> paramKeys) {
         StringBuilder sb = new StringBuilder("*" + data.size() + _R_N);
-        Set<String> streamSet = data.keySet();
-        for (String s : streamSet) {
+        for (String s : paramKeys) {
             sb.append("*2" + _R_N + "$").append(s.length()).append(_R_N).append(s).append(_R_N).append(data.get(s));
         }
         return sb.toString().getBytes();
