@@ -18,6 +18,7 @@ public class XRead extends AbstractCommand {
         List<String> paramKeys = new ArrayList<>();
         if ("block".equalsIgnoreCase(convertByteToString(content.get(1)))) {
             blockMillSenconds = Long.parseLong(convertByteToString(content.get(2)));
+            System.out.printf("block mill senconds:" + blockMillSenconds);
             keySize = (content.size() - 4) / 2;
         } else {
             keySize = (content.size() - 2) / 2;
@@ -31,6 +32,7 @@ public class XRead extends AbstractCommand {
             return buildSimpleErrResponse("1");
         }
         Instant start = Instant.now();
+        System.out.println("now is " + start);
         while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
             try {Thread.sleep(50);} catch (InterruptedException ignored) {}
             data = readData(content, 0, keySize, paramKeys, blockMillSenconds > 0);
@@ -38,6 +40,7 @@ public class XRead extends AbstractCommand {
                 return buildXReadRet(data, paramKeys);
             }
         }
+        System.out.println("now is " + Instant.now());
         System.out.println("time out XRead,data is null");
         return buildSimpleErrResponse("1");
     }
