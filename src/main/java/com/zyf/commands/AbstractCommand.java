@@ -1,10 +1,5 @@
 package com.zyf.commands;
 
-import com.zyf.Constant.Constants;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.zyf.Constant.Constants._R_N;
@@ -43,8 +38,27 @@ public abstract class AbstractCommand implements Command {
         return command.toString().getBytes();
     }
 
+    public byte[] buildArraysResponse(java.util.Set<Object> data) {
+
+        StringBuilder command = new StringBuilder("*" + data.size() + _R_N);
+        for (Object o : data) {
+            if (o instanceof String o1) {
+                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+            }else {
+                String o1 = new String((byte[]) o);
+                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+            }
+        }
+        System.out.println("build command ->" + command);
+        return command.toString().getBytes();
+    }
+
     public byte[] buildIntegerResponse(int data) {
         String response = ":" + data + _R_N;
         return response.getBytes();
+    }
+
+    public String convertByteToString(Object param) {
+        return new String((byte[]) param);
     }
 }
