@@ -1,8 +1,10 @@
 package com.zyf.commands;
 
+import com.zyf.Constant.Constants;
 import com.zyf.collect.RedisRepository;
 import com.zyf.stream.StreamData;
 
+import java.lang.constant.Constable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -18,7 +20,6 @@ public class XRead extends AbstractCommand {
         List<String> paramKeys = new ArrayList<>();
         if ("block".equalsIgnoreCase(convertByteToString(content.get(1)))) {
             blockMillSenconds = Long.parseLong(convertByteToString(content.get(2)));
-            System.out.println("block mill senconds:" + blockMillSenconds);
             keySize = (content.size() - 4) / 2;
         } else {
             keySize = (content.size() - 2) / 2;
@@ -29,10 +30,9 @@ public class XRead extends AbstractCommand {
         if (!isNull) {
             return buildXReadRet(data, paramKeys);
         } else if (blockMillSenconds == 0) {
-            return "$-1\r\n".getBytes();
+            return Constants.NULL_BULK_STRING_BYTES;
         }
         Instant start = Instant.now();
-        System.out.println("now is " + start);
         while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
             try {Thread.sleep(50);} catch (InterruptedException ignored) {}
             data = readData(content, 0, keySize, paramKeys, blockMillSenconds > 0);
@@ -40,9 +40,8 @@ public class XRead extends AbstractCommand {
                 return buildXReadRet(data, paramKeys);
             }
         }
-        System.out.println("now is " + Instant.now());
         System.out.println("time out XRead,data is null");
-        return "$-1\r\n".getBytes();
+        return Constants.NULL_BULK_STRING_BYTES;
     }
 
     private Map<String, String> readData(List<Object> content, int i, int keySize, List<String> paramKeys, boolean block) {
