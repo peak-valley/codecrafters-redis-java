@@ -119,7 +119,7 @@ public class XRead extends AbstractCommand {
         if (startStreamData.compareTo(endStreamData) > 0) {
             return buildArrayString(Collections.emptyList());
         }
-        NavigableSet<StreamData> streamDataSet = stream.subSet(startStreamData, true, endStreamData, true);
+        NavigableSet<StreamData> streamDataSet = stream.subSet(startStreamData, false, endStreamData, false);
 
         String ret = buildStreamDataSet(streamDataSet);
         System.out.println("build result->" + ret);
