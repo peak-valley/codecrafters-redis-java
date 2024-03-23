@@ -35,7 +35,14 @@ public class XRange extends AbstractCommand {
             startTimeMillSeconds = Long.parseLong(start);
         }
 
-        if (end.contains("-")) {
+        if (end.equals("-")) {
+            StreamData streamData = RedisRepository.lastStream();
+            if (streamData == null) {
+                return buildArraysResponse(Collections.emptyList());
+            }
+            endTimeMillSeconds = streamData.getTimeMillSeconds();
+            endSequenceNumber = streamData.getSequenceNumber();
+        } else if (end.contains("-")) {
             String[] split = end.split("-");
             endTimeMillSeconds = Long.parseLong(split[0]);
             endSequenceNumber = Long.parseLong(split[1]);

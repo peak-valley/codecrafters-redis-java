@@ -24,4 +24,8 @@ public class RedisRepository {
     public static StreamData firstStream() {
         return streamId.first();
     }
+
+    public static StreamData lastStream() {
+        return streamId.last();
+    }
 }
