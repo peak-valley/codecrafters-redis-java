@@ -2,7 +2,10 @@ package com.zyf.commands;
 
 import com.zyf.collect.RedisRepository;
 import com.zyf.stream.StreamData;
+import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.Set;
 
@@ -11,11 +14,47 @@ import static com.zyf.Constant.Constants._R_N;
 public class XRead extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
-        int keySize = (content.size() - 2) / 2;
+        long blockMillSenconds = 0;
+        int keySize;
+        int i = 0;
+        if ("block".equalsIgnoreCase(convertByteToString(content.get(1)))) {
+            blockMillSenconds = Long.parseLong(convertByteToString(content.get(2)));
+            keySize = (content.size() - 4) / 2;
+        } else {
+            keySize = (content.size() - 2) / 2;
+        }
+        Map<String, String> data = readData(content, i, keySize, blockMillSenconds > 0);
+
+        boolean isNull = checkIsNull(data);
+        if (!isNull) {
+            return buildXReadRet(data);
+        } else if (blockMillSenconds == 0) {
+            return buildSimpleErrResponse("1");
+        }
+        Instant start = Instant.now();
+        while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
+            try {Thread.sleep(50);} catch (InterruptedException ignored) {}
+            data = readData(content, 0, keySize, blockMillSenconds > 0);
+            if (!checkIsNull(data)) {
+                return buildXReadRet(data);
+            }
+        }
+        System.out.println("time out XRead,data is null");
+        return buildSimpleErrResponse("1");
+    }
+
+    private Map<String, String> readData(List<Object> content, int i, int keySize, boolean block) {
         Map<String, String> ret = new HashMap<>();
-        for (int i = 0; i < keySize; i++) {
-            String key = convertByteToString(content.get(i + 2));
-            String streamId = convertByteToString(content.get(i + 2 + keySize));
+        for (; i < keySize; i++) {
+            String key;
+            String streamId;
+            if (block) {
+                key = convertByteToString(content.get(i + 4));
+                streamId = convertByteToString(content.get(i + 4 + keySize));
+            } else {
+                key = convertByteToString(content.get(i + 2));
+                streamId = convertByteToString(content.get(i + 2 + keySize));
+            }
             String start, end = "+";
             if ("0".equals(streamId) || "0-0".equals(streamId)) {
                 start = "0";
@@ -24,15 +63,14 @@ public class XRead extends AbstractCommand {
             }
             ret.put(key, select(start, end, key));
         }
-
-        return buildXReadRet(ret);
+        return ret;
     }
 
     private byte[] buildXReadRet(Map<String, String> data) {
         StringBuilder sb = new StringBuilder("*" + data.size() + _R_N);
         Set<String> streamSet = data.keySet();
         for (String s : streamSet) {
-            sb.append("*2" + _R_N + "$" + s.length() + _R_N + s + _R_N + data.get(s));
+            sb.append("*2" + _R_N + "$").append(s.length()).append(_R_N).append(s).append(_R_N).append(data.get(s));
         }
         return sb.toString().getBytes();
     }
@@ -78,9 +116,27 @@ public class XRead extends AbstractCommand {
         if (stream == null || stream.isEmpty()) {
             return buildArrayString(Collections.emptyList());
         }
+        if (startStreamData.compareTo(endStreamData) > 0) {
+            return buildArrayString(Collections.emptyList());
+        }
         NavigableSet<StreamData> streamDataSet = stream.subSet(startStreamData, true, endStreamData, true);
 
-        return buildStreamDataSet(streamDataSet);
+        String ret = buildStreamDataSet(streamDataSet);
+        System.out.println("build result->" + ret);
+        return ret;
+    }
+
+    private boolean checkIsNull(Map<String, String> data) {
+        if (data == null || data.isEmpty()) {
+            return true;
+        }
+        boolean isNull = true;
+        for (String k : data.keySet()) {
+            if (!data.get(k).equals("*0" + _R_N)) {
+                isNull = false;
+            }
+        }
+        return isNull;
     }
 
     private String buildStreamDataSet(NavigableSet<StreamData> data) {
@@ -100,7 +156,6 @@ public class XRead extends AbstractCommand {
                 command.append("$").append(value.length()).append(_R_N).append(value).append(_R_N);
             }
         }
-        System.out.println("build command ->" + command);
         return command.toString();
     }
 
@@ -116,7 +171,6 @@ public class XRead extends AbstractCommand {
                 command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
             }
         }
-        System.out.println("build command ->" + command);
         return command.toString();
     }
 }

@@ -22,10 +22,18 @@ public class RedisRepository {
     }
 
     public static StreamData firstStream() {
-        return streamId.first();
+        try {
+            return streamId.first();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     public static StreamData lastStream() {
-        return streamId.last();
+        try {
+            return streamId.last();
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 }
