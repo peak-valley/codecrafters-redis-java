@@ -60,7 +60,9 @@ public class XRead extends AbstractCommand {
             } else {
                 start = streamId;
             }
-            paramKeys.add(key);
+            if (!paramKeys.contains(key)) {
+                paramKeys.add(key);
+            }
             ret.put(key, select(start, end, key));
         }
         return ret;

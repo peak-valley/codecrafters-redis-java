@@ -115,8 +115,9 @@ public class TestClient {
 //                concurrentXadd(outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
-                xadd1("mysteream1",outputStream, bufferedReader);
-                xreadBlock(outputStream, bufferedReader);
+                String key = "blueberry", streamId = "0-3";
+                xadd1(key, streamId,outputStream, bufferedReader);
+                xreadBlock2(key, streamId, outputStream, bufferedReader);
 //                xrange(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
@@ -149,7 +150,16 @@ public class TestClient {
             }
         }
     }
-
+    private static void xreadBlock2(String key, String streamId, OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*6\r\n$5\r\nxread\r\n$5\r\nblock\r\n$5\r\n20000\r\n$7\r\nstreams\r\n$"+key.length()+"\r\n"+key+"\r\n$"+streamId.length()+"\r\n"+streamId+"\r\n";
+        outputStream.write(command.getBytes());
+//        char[] c;
+//        int len = bufferedReader.read();
+//        c = new char[len];
+//        bufferedReader.read(c);
+//        final String s = new String(c);
+//        System.out.println(s);
+    }
     private static void xreadBlock(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
         String command = "*8\r\n$5\r\nxread\r\n$5\r\nblock\r\n$5\r\n20000\r\n$7\r\nstreams\r\n$10\r\nmysteream1\r\n$10\r\nmysteream2\r\n$3\r\n1-4\r\n$1\r\n0\r\n";
         outputStream.write(command.getBytes());
@@ -162,8 +172,8 @@ public class TestClient {
     }
 
 
-    private static void xadd1(String key, OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*5\r\n$4\r\nxadd\r\n$" + key.length() + "\r\n"+ key +"\r\n$3\r\n1-5\r\n$1\r\n1\r\n$1\r\n1\r\n";
+    private static void xadd1(String key, String streamId, OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*5\r\n$4\r\nxadd\r\n$" + key.length() + "\r\n"+ key +"\r\n$"+streamId.length()+"\r\n" + streamId + "\r\n$1\r\n1\r\n$1\r\n1\r\n";
         outputStream.write(command.getBytes());
     }
     private static void xread(OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
