@@ -84,7 +84,7 @@ public class XRange extends AbstractCommand {
             command.append("*2" + _R_N);
             // stream id
             String streamId = streamData.getTimeMillSeconds() + "-" + streamData.getSequenceNumber();
-            command.append("$").append(streamId.length()).append(_R_N);
+            command.append("$").append(streamId.length()).append(_R_N).append(streamId).append(_R_N);
             // entry
             Map<String, String> entryFields = streamData.getEntryFields();
             int size = entryFields.size();
