@@ -123,7 +123,6 @@ public class XRead extends AbstractCommand {
         NavigableSet<StreamData> streamDataSet = stream.subSet(startStreamData, false, endStreamData, true);
 
         String ret = buildStreamDataSet(streamDataSet);
-        System.out.println("build result->" + ret);
         return ret;
     }
 
