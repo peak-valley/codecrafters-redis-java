@@ -4,7 +4,6 @@ import com.zyf.Constant.Constants;
 import com.zyf.collect.RedisRepository;
 import com.zyf.stream.StreamData;
 
-import java.lang.constant.Constable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -14,7 +13,7 @@ import static com.zyf.Constant.Constants._R_N;
 public class XRead extends AbstractCommand {
     @Override
     public byte[] execute(List<Object> content) {
-        long blockMillSenconds = 0;
+        long blockMillSenconds = -1;
         int keySize;
         int i = 0;
         List<String> paramKeys = new ArrayList<>();
@@ -24,20 +23,30 @@ public class XRead extends AbstractCommand {
         } else {
             keySize = (content.size() - 2) / 2;
         }
-        Map<String, String> data = readData(content, i, keySize, paramKeys, blockMillSenconds > 0);
+        Map<String, String> data = readData(content, i, keySize, paramKeys, blockMillSenconds >= 0);
 
         boolean isNull = checkIsNull(data);
         if (!isNull) {
             return buildXReadRet(data, paramKeys);
-        } else if (blockMillSenconds == 0) {
+        } else if (blockMillSenconds < 0) {
             return Constants.NULL_BULK_STRING_BYTES;
         }
         Instant start = Instant.now();
-        while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
-            try {Thread.sleep(50);} catch (InterruptedException ignored) {}
-            data = readData(content, 0, keySize, paramKeys, blockMillSenconds > 0);
-            if (!checkIsNull(data)) {
-                return buildXReadRet(data, paramKeys);
+        if (blockMillSenconds == 0) {
+            while (true) {
+                try {Thread.sleep(50);} catch (InterruptedException ignored) {}
+                data = readData(content, 0, keySize, paramKeys, blockMillSenconds >= 0);
+                if (!checkIsNull(data)) {
+                    return buildXReadRet(data, paramKeys);
+                }
+            }
+        } else {
+            while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
+                try {Thread.sleep(50);} catch (InterruptedException ignored) {}
+                data = readData(content, 0, keySize, paramKeys, blockMillSenconds >= 0);
+                if (!checkIsNull(data)) {
+                    return buildXReadRet(data, paramKeys);
+                }
             }
         }
         System.out.println("time out XRead,data is null");

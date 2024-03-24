@@ -115,9 +115,9 @@ public class TestClient {
 //                concurrentXadd(outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
-                String key = "blueberry", streamId = "0-3";
+                String key = "blueberry", streamId = "0-4";
                 xadd1(key, streamId,outputStream, bufferedReader);
-                xreadBlock2(key, streamId, outputStream, bufferedReader);
+//                xreadBlock2(key, streamId, "0", outputStream, bufferedReader);
 //                xrange(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);
@@ -150,8 +150,8 @@ public class TestClient {
             }
         }
     }
-    private static void xreadBlock2(String key, String streamId, OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
-        String command = "*6\r\n$5\r\nxread\r\n$5\r\nblock\r\n$5\r\n20000\r\n$7\r\nstreams\r\n$"+key.length()+"\r\n"+key+"\r\n$"+streamId.length()+"\r\n"+streamId+"\r\n";
+    private static void xreadBlock2(String key, String streamId, String blockMillSeconds, OutputStream outputStream, BufferedReader bufferedReader) throws IOException {
+        String command = "*6\r\n$5\r\nxread\r\n$5\r\nblock\r\n$"+blockMillSeconds.length()+"\r\n"+blockMillSeconds+"\r\n$7\r\nstreams\r\n$"+key.length()+"\r\n"+key+"\r\n$"+streamId.length()+"\r\n"+streamId+"\r\n";
         outputStream.write(command.getBytes());
 //        char[] c;
 //        int len = bufferedReader.read();
