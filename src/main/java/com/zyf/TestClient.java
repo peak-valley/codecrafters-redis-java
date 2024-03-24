@@ -115,9 +115,11 @@ public class TestClient {
 //                concurrentXadd(outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
 //                xadd("mysteream1",outputStream, bufferedReader);
-                String key = "blueberry", streamId = "0-4";
+                String key = "blueberry", streamId = "0-3";
+                String dollarStreamId = "$";
                 xadd1(key, streamId,outputStream, bufferedReader);
-//                xreadBlock2(key, streamId, "0", outputStream, bufferedReader);
+                xreadBlock2(key, streamId, "0", outputStream, bufferedReader);
+//                xreadBlock2(key, dollarStreamId, "0", outputStream, bufferedReader);
 //                xrange(outputStream, bufferedReader);
 //                pong(outputStream, bufferedReader);
 //                ping(outputStream, bufferedReader);

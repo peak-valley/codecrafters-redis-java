@@ -7,6 +7,7 @@ import com.zyf.stream.StreamData;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.Set;
 
 import static com.zyf.Constant.Constants._R_N;
 
@@ -24,6 +25,13 @@ public class XRead extends AbstractCommand {
             keySize = (content.size() - 2) / 2;
         }
         Map<String, String> data = readData(content, i, keySize, paramKeys, blockMillSenconds >= 0);
+        Map<String, StreamData> streamIsDollarParam = readStreamIdIsDollar(content, i, keySize, paramKeys, blockMillSenconds >= 0);
+        Set<String> paramKeySet = streamIsDollarParam.keySet();
+        for (String key : paramKeySet) {
+            StreamData streamData = streamIsDollarParam.get(key);
+            data.put(key, select(streamData.getStreamId(), "+", key));
+
+        }
 
         boolean isNull = checkIsNull(data);
         if (!isNull) {
@@ -32,25 +40,60 @@ public class XRead extends AbstractCommand {
             return Constants.NULL_BULK_STRING_BYTES;
         }
         Instant start = Instant.now();
-        if (blockMillSenconds == 0) {
-            while (true) {
-                try {Thread.sleep(50);} catch (InterruptedException ignored) {}
-                data = readData(content, 0, keySize, paramKeys, blockMillSenconds >= 0);
-                if (!checkIsNull(data)) {
-                    return buildXReadRet(data, paramKeys);
-                }
+
+        while (untimed(start, blockMillSenconds)) {
+            try {Thread.sleep(50);} catch (InterruptedException ignored) {}
+            data = readData(content, 0, keySize, paramKeys, blockMillSenconds >= 0);
+//            streamIsDollarParam = readStreamIdIsDollar(content, i, keySize, paramKeys, blockMillSenconds >= 0);
+            paramKeySet = streamIsDollarParam.keySet();
+            for (String key : paramKeySet) {
+                StreamData streamData = streamIsDollarParam.get(key);
+                data.put(key, select(streamData.getStreamId(), "+", key));
+
             }
-        } else {
-            while (Duration.between(start, Instant.now()).toMillis() < blockMillSenconds) {
-                try {Thread.sleep(50);} catch (InterruptedException ignored) {}
-                data = readData(content, 0, keySize, paramKeys, blockMillSenconds >= 0);
-                if (!checkIsNull(data)) {
-                    return buildXReadRet(data, paramKeys);
-                }
+            if (!checkIsNull(data)) {
+                return buildXReadRet(data, paramKeys);
             }
         }
+
         System.out.println("time out XRead,data is null");
         return Constants.NULL_BULK_STRING_BYTES;
+    }
+
+    private Map<String, StreamData> readStreamIdIsDollar(List<Object> content, int i, int keySize, List<String> paramKeys, boolean block) {
+        Map<String, StreamData> ret = new HashMap<>();
+        for (; i < keySize; i++) {
+            String key;
+            String streamId;
+            if (block) {
+                key = convertByteToString(content.get(i + 4));
+                streamId = convertByteToString(content.get(i + 4 + keySize));
+            } else {
+                key = convertByteToString(content.get(i + 2));
+                streamId = convertByteToString(content.get(i + 2 + keySize));
+            }
+
+            if (!"$".equals(streamId)) {
+                continue;
+            }
+            TreeSet<StreamData> stream = RedisRepository.getStream(key);
+            if (stream == null || stream.isEmpty()) {
+                ret.put(key, StreamData.builder().stream("0-0").build());
+            } else {
+                ret.put(key, stream.last());
+            }
+            if (!paramKeys.contains(key)) {
+                paramKeys.add(key);
+            }
+        }
+        return ret;
+    }
+
+    private static boolean untimed(Instant start, long blockMillSecond) {
+        if (blockMillSecond == 0) {
+            return true;
+        }
+        return Duration.between(start, Instant.now()).toMillis() < blockMillSecond;
     }
 
     private Map<String, String> readData(List<Object> content, int i, int keySize, List<String> paramKeys, boolean block) {
@@ -65,6 +108,11 @@ public class XRead extends AbstractCommand {
                 key = convertByteToString(content.get(i + 2));
                 streamId = convertByteToString(content.get(i + 2 + keySize));
             }
+
+            if ("$".equals(streamId)) {
+                continue;
+            }
+
             String start, end = "+";
             if ("0".equals(streamId) || "0-0".equals(streamId)) {
                 start = "0";
