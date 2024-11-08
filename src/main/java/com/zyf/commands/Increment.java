@@ -18,6 +18,11 @@ public class Increment extends AbstractCommand {
         log.info("incr:key:{}", key);
 
         KVString kvString = SimpleKVCache.get(key);
+        if (kvString == null) {
+            KVString save = new KVString(key, "1");
+            SimpleKVCache.put(save.getK(), save);
+            return buildIntegerResponse(1);
+        }
         String vStr = kvString.getV();
         int v = Integer.parseInt(vStr);
         ++v;
