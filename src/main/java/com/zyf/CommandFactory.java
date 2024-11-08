@@ -41,8 +41,8 @@ public class CommandFactory {
             System.out.println("command " + command + " is not exist");
             return null;
         }
-        if(RedisRepository.multiStateOpen()) {
-            RedisRepository.multiOffer(content);
+        if(Multi.multiStateOpen()) {
+            Multi.multiOffer(content);
             return buildSimpleStrResponse("OK");
         }
         System.out.println(command + " command is running");
