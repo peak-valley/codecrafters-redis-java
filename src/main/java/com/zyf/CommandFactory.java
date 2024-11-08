@@ -2,6 +2,7 @@ package com.zyf;
 
 import com.zyf.Constant.Constants;
 import com.zyf.Constant.CommandEnum;
+import com.zyf.collect.RedisRepository;
 import com.zyf.commands.*;
 
 import java.util.HashMap;
@@ -30,6 +31,7 @@ public class CommandFactory {
         commandCache.put(CommandEnum.XREAD.getName(), new XRead());
         //Transactions
         commandCache.put(CommandEnum.INCR.getName(), new Increment());
+        commandCache.put(CommandEnum.MULTI.getName(), new Multi());
 
     }
 
@@ -39,7 +41,15 @@ public class CommandFactory {
             System.out.println("command " + command + " is not exist");
             return null;
         }
+        if(RedisRepository.multiStateOpen()) {
+            RedisRepository.multiOffer(content);
+            return buildSimpleStrResponse("OK");
+        }
         System.out.println(command + " command is running");
         return c.execute(content);
+    }
+
+    public byte[] buildSimpleStrResponse(String content) {
+        return ("+" + content + "\r\n").getBytes();
     }
 }

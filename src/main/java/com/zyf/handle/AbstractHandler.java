@@ -6,6 +6,7 @@ import com.zyf.Constant.Constants;
 import com.zyf.Protocol;
 import com.zyf.ThreadPool;
 import com.zyf.cluster.Master;
+import com.zyf.collect.RedisRepository;
 import com.zyf.concurrent.GlobalBlocker;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public abstract class AbstractHandler implements IHandler {
                 outputStream = clientSocket.getOutputStream();
             }
             String c = "";
+            RedisRepository.setConnectCache(clientSocket.getInetAddress().getHostAddress(), clientSocket.getPort());
             while (true) {
                 final Object data = Protocol.process(inputStream);
                 if (!isSlave) {

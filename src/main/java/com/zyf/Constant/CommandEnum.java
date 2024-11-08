@@ -19,6 +19,7 @@ public enum CommandEnum {
     WAIT("WAIT", OTHER),
     CONFIG("CONFIG", OTHER),
     TYPE("TYPE", OTHER),
+    MULTI("MULTI", OTHER),
     NULL("NULL", OTHER)
 
     ;
