@@ -6,6 +6,7 @@ public enum CommandEnum {
     GET("GET", READ),
     SET("SET", WRITE),
     XADD("XADD", WRITE),
+    INCR("INCR", WRITE),
     KEYS("KEYS", READ),
     ECHO("ECHO", READ),
     INFO("INFO", READ),

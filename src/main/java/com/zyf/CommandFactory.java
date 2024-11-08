@@ -28,6 +28,9 @@ public class CommandFactory {
         commandCache.put(CommandEnum.XADD.getName(), new Xadd());
         commandCache.put(CommandEnum.XRANGE.getName(), new XRange());
         commandCache.put(CommandEnum.XREAD.getName(), new XRead());
+        //Transactions
+        commandCache.put(CommandEnum.INCR.getName(), new Increment());
+
     }
 
     public byte[] execute(String command, List<Object> content) {

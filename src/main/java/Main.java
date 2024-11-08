@@ -70,8 +70,10 @@ public class Main {
                     continue;
                 }
                 //resolve master host
-                ClusterInformation.put(Constants.MASTER_HOST, args[++i]);
-                ClusterInformation.put(Constants.MASTER_PORT, args[++i]);
+                String[] hostPort = args[++i].split(" ");
+
+                ClusterInformation.put(Constants.MASTER_HOST, hostPort[0]);
+                ClusterInformation.put(Constants.MASTER_PORT, hostPort[1]);
                 try {
                     Slave slave = new Slave();
                     slave.init();
