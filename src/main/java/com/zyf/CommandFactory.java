@@ -32,6 +32,7 @@ public class CommandFactory {
         //Transactions
         commandCache.put(CommandEnum.INCR.getName(), new Increment());
         commandCache.put(CommandEnum.MULTI.getName(), new Multi());
+        commandCache.put(CommandEnum.EXEC.getName(), new Multi());
 
     }
 
@@ -41,9 +42,9 @@ public class CommandFactory {
             System.out.println("command " + command + " is not exist");
             return null;
         }
-        if(Multi.multiStateOpen()) {
+        if(!command.equals("EXEC") && Multi.multiStateOpen()) {
             Multi.multiOffer(content);
-            return buildSimpleStrResponse("OK");
+            return buildSimpleStrResponse("QUEUE");
         }
         System.out.println(command + " command is running");
         return c.execute(content);

@@ -20,6 +20,7 @@ public enum CommandEnum {
     CONFIG("CONFIG", OTHER),
     TYPE("TYPE", OTHER),
     MULTI("MULTI", OTHER),
+    EXEC("EXEC", OTHER),
     NULL("NULL", OTHER)
 
     ;
