@@ -1,10 +1,11 @@
 package com.zyf.collect;
 
 import com.zyf.stream.StreamData;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public class RedisRepository {
     private static final Map<String, TreeSet<StreamData>> streamMap = new HashMap<>();
     private static final TreeSet<StreamData> streamId = new TreeSet<>(StreamData::compareTo);
@@ -16,10 +17,9 @@ public class RedisRepository {
         streamId.addAll(v);
     }
 
-
-
     public static ConnectInfo getConnectInfo() {
-        return connectCache.get();
+        ConnectInfo connectInfo = connectCache.get();
+        return connectInfo;
     }
 
     public static void setConnectCache(String ip, int port) {

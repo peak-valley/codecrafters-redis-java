@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CommandFactory {
-    final static Map<String, Command> commandCache = new HashMap<>();
+    protected final static Map<String, Command> commandCache = new HashMap<>();
 
     public CommandFactory() {
         if (!commandCache.isEmpty()) {

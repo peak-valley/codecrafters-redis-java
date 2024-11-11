@@ -3,7 +3,6 @@ package com.zyf.commands;
 import com.zyf.CommandFactory;
 import lombok.extern.slf4j.Slf4j;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,28 +21,20 @@ public class Exec extends AbstractCommand {
         }
 
         Queue<List<Object>> commandQueue = Multi.getCommandQueue();
-        List<byte[]> resList = new ArrayList<>();
-        int len = 0;
+        List<Object> resList = new ArrayList<>();
         Multi.switchMulti(false);
         while(commandQueue.peek() != null) {
             List<Object> commands = commandQueue.poll();
-            byte[] commandRes = commandFactory.execute(String.valueOf(commands.getFirst()), commands);
-            len += commandRes.length;
+            byte[] bytes = (byte[]) commands.getFirst();
+            final String command = new String(bytes).toUpperCase();
+            byte[] commandRes = commandFactory.execute(command, commands);
             resList.add(commandRes);
         }
 
-        if (len == 0) {
+        if (resList.isEmpty()) {
             return buildArraysResponse(Collections.emptyList());
         }
 
-        return concatenate(resList, len);
-    }
-
-    public byte[] concatenate(List<byte[]> bytesList, int totalLen) {
-        ByteBuffer buffer = ByteBuffer.allocate(totalLen);
-        for (byte[] bytes : bytesList) {
-            buffer.put(bytes);
-        }
-        return buffer.array();
+        return buildCommandArraysResponse(resList);
     }
 }

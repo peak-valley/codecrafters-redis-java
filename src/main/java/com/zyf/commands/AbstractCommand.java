@@ -26,13 +26,29 @@ public abstract class AbstractCommand implements Command {
 
         StringBuilder command = new StringBuilder("*" + data.size() + _R_N);
         for (Object o : data) {
+            String o1;
             if (o instanceof String) {
-                String o1 = (String) o;
-                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+                o1 = (String) o;
             }else {
-                String o1 = new String((byte[]) o);
-                command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+                o1 = new String((byte[]) o);
             }
+            command.append("$").append(o1.length()).append(_R_N).append(o1).append(_R_N);
+        }
+        System.out.println("build command ->" + command);
+        return command.toString().getBytes();
+    }
+
+    public byte[] buildCommandArraysResponse(List<Object> data) {
+
+        StringBuilder command = new StringBuilder("*" + data.size() + _R_N);
+        for (Object o : data) {
+            String o1;
+            if (o instanceof String) {
+                o1 = (String) o;
+            }else {
+                o1 = new String((byte[]) o);
+            }
+            command.append(o1);
         }
         System.out.println("build command ->" + command);
         return command.toString().getBytes();
