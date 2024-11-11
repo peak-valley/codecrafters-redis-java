@@ -48,7 +48,7 @@ public class CommandFactory {
         }
         if(!command.equals("EXEC") && Multi.multiStateOpen()) {
             Multi.multiOffer(content);
-            return buildSimpleStrResponse("QUEUE");
+            return buildSimpleStrResponse("QUEUED");
         }
         System.out.println(command + " command is running");
         return c.execute(content);
