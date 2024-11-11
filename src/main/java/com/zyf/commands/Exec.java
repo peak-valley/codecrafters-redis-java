@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Queue;
 
@@ -26,12 +27,15 @@ public class Exec extends AbstractCommand {
         Multi.switchMulti(false);
         while(commandQueue.peek() != null) {
             List<Object> commands = commandQueue.poll();
-            byte[] commandRes = commandFactory.execute(String.valueOf(commands.get(0)), commands);
+            byte[] commandRes = commandFactory.execute(String.valueOf(commands.getFirst()), commands);
             len += commandRes.length;
             resList.add(commandRes);
         }
 
-        Multi.switchMulti(false);
+        if (len == 0) {
+            return buildArraysResponse(Collections.emptyList());
+        }
+
         return concatenate(resList, len);
     }
 
