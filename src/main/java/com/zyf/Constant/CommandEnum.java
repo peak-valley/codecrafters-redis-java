@@ -21,6 +21,7 @@ public enum CommandEnum {
     TYPE("TYPE", OTHER),
     MULTI("MULTI", OTHER),
     EXEC("EXEC", OTHER),
+    DISCARD("DISCARD", OTHER),
     NULL("NULL", OTHER)
 
     ;

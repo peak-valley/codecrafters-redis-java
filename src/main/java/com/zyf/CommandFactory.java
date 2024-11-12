@@ -37,6 +37,7 @@ public class CommandFactory {
         commandCache.put(CommandEnum.INCR.getName(), new Increment());
         commandCache.put(CommandEnum.MULTI.getName(), new Multi());
         commandCache.put(CommandEnum.EXEC.getName(), new Exec());
+        commandCache.put(CommandEnum.DISCARD.getName(), new Discard());
 
     }
 
@@ -46,7 +47,7 @@ public class CommandFactory {
             System.out.println("command " + command + " is not exist");
             return null;
         }
-        if(!command.equals("EXEC") && Multi.multiStateOpen()) {
+        if(!command.equals("EXEC") && !command.equals("DISCARD") && Multi.multiStateOpen()) {
             Multi.multiOffer(content);
             return buildSimpleStrResponse("QUEUED");
         }
